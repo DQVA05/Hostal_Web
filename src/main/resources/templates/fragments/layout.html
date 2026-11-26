@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{layoutTitle}">Casita de Tercera "Casamar"</title>
+</head>
+<body>
+    <header>
+        <h1>Bienvenido sea a la  Casita de Tercera "Casamar"</h1>
+    </header>
+    <main>
+        <!-- Main content will be injected here -->
+        <div th:replace="~{::content}"></div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Casita de Tercera. All rights reserved.</p>
+    </footer>
+</body>
+</html>

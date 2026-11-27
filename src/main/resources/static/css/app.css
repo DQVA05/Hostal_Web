@@ -1,24 +1,21 @@
 
 /* 0. Reset CSS: se eliminan los márgenes y paddings por defecto de todos los elementos.
-      Se hace un reset de los estilos por defecto del navegador. */
+      Solo se resetea el espaciado; el color, la letra y el fondo se ponen en body
+      y los demás elementos los heredan. */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: var(--color-texto);
-  background: var(--color-fondo);
 }
 
 /* 1. Variables CSS: se definen una vez y se reutilizan.
-      Para cambiar el color de todo el sitio basta con tocar una línea. */
+      Para cambiar el color de todo el sitio basta con tocar una línea.
+      Todas las combinaciones cumplen el contraste mínimo de WCAG (4.5:1). */
 :root {
-  --color-fondo: #577dc5; /* por qué los datos están en español? porque es más fácil de recordar y de escribir. */
-  --color-texto: #1d2433;
-  --color-suave: #5b6476;
-  --color-principal: #104fd6;
+  --color-fondo: #f4f7fc;     /* fondo claro de la página */
+  --color-texto: #1d2433;     /* texto normal (14.5:1 sobre el fondo) */
+  --color-suave: #5b6476;     /* párrafos (5.5:1 sobre el fondo) */
+  --color-principal: #104fd6; /* azul de la marca (6.3:1 sobre el fondo, 6.8:1 con texto blanco) */
+  --color-principal-oscuro: #0b3a9e; /* hover del botón */
   --espacio: 1rem;          /* rem = relativo al tamaño de letra raíz (16 px por defecto) */
 }
 
@@ -30,26 +27,51 @@
   box-sizing: border-box;
 }
 
-
+/* 3. Estilos base: los hereda toda la página. */
 body {
-  margin: 0;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 1.0625rem;
   line-height: 1.6;
   color: var(--color-texto);
   background: var(--color-fondo);
 }
-h1{
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    font-size: clamp(1.75rem, 5vw, 2.75rem);
-    margin: 0 auto;
-    text-align: center;
-    line-height: 3.2;
-    color: var(--color-principal);
+
+/* 4. Títulos y texto. */
+h1 {
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  line-height: 1.2;
+  text-align: center;
+  color: var(--color-principal);
 }
+
 p {
   color: var(--color-suave);
 }
+
+/* 5. Cabecera: franja azul con texto blanco. */
+.cabecera {
+  padding: calc(var(--espacio) * 2) var(--espacio);
+  background: var(--color-principal);
+  text-align: center;
+}
+
+.cabecera .marca,
+.cabecera h1 {
+  color: #fff;
+}
+
+/* 6. Contenido: margen lateral de 1rem en el móvil y ancho máximo
+      para que las líneas no queden demasiado largas en pantallas grandes. */
+.contenido {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: calc(var(--espacio) * 2) var(--espacio);
+}
+
+.contenido > * + * {
+  margin-top: calc(var(--espacio) * 0.5); /* separa los elementos entre sí */
+}
+
 /* 7. Un enlace con forma de botón y estados interactivos. */
 .boton {
   display: inline-block;
@@ -64,12 +86,12 @@ p {
 }
 
 .boton:hover {
-  background: #1a4fc4;
+  background: var(--color-principal-oscuro);
 }
 
 /* 8. Accesibilidad: contorno visible cuando se navega con el teclado (Tab). */
 .boton:focus-visible {
-  outline: 3px solid #93b4ff;
+  outline: 3px solid var(--color-principal);
   outline-offset: 2px;
 }
 

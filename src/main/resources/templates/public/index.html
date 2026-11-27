@@ -2,27 +2,27 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1">  <!--  Esto asegura que la página se vea bien en dispositivos móviles -->
-    <title th:text="'Casita de Tercera ' ">Casita de Tercera "Costamar"</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">  <!--  Esto asegura que la página se vea bien en dispositivos móviles -->
+  <title>Casita de Tercera "Costamar"</title>
   <link rel="stylesheet" th:href="@{/css/app.css}"> <!-- Esto enlaza el archivo CSS para estilos personalizados -->
 </head>
 
 <body>
-      <header class="cabecera">
-    <p class="marca">Hostal Casamar</p>
-    <h1 th:text="'Hola, '+${nombre}">Hola, invitado</h1>
-  </header>
-  
-  <h2 th:text="'Bienvenido a la Casita de Tercera '">Bienvenido a la Casita de Tercera</h2>
-  <p th:text="'Hoy es ' + ${fecha}">Hoy es [fecha]</p>
-    <p th:text="'El clima actual es ' + ${clima}">El clima actual es [clima]</p> <!-- luego se sacará dicha información de un API de clima. -->
-  <p th:text="'La temperatura es ' + ${temperatura} + '°C'">La temperatura es [temperatura]°C</p> <!--comentario de arriba. -->
-  <p th:text="'La capacidad máxima es: de ' + ${capacidadMaxima} + ' personas '">La capacidad máxima es: de [capacidadMaxima] personas</p>
-   <main class="contenido">
+  <header class="cabecera">
+    <p class="marca">Hostal Costamar</p>
     <h1 th:text="'Hola, ' + ${nombre}">Hola, invitado</h1>
+  </header>
+
+  <main class="contenido">
+    <h2 th:text="'Bienvenido a la Casita de Tercera '">Bienvenido a la Casita de Tercera</h2>
+    <p th:text="'Hoy es ' + ${fecha}">Hoy es [fecha]</p>
+    <p th:text="'El clima actual es ' + ${clima}">El clima actual es [clima]</p> <!-- luego se sacará dicha información de un API de clima. -->
+    <p th:text="'La temperatura es ' + ${temperatura} + '°C'">La temperatura es [temperatura]°C</p> <!--comentario de arriba. -->
+    <p th:text="'La capacidad máxima es de ' + ${capacidadMaxima} + ' personas'">La capacidad máxima es de [capacidadMaxima] personas</p>
+
     <p>Esta página la genera Spring Boot con Thymeleaf. El estilo viene de un
        archivo CSS servido desde la carpeta static.</p>
-    <a class="boton" href="#">Empezar</a>
+    <a class="boton" th:href="@{/reservas}">Reservar</a> <!-- la página /reservas todavía no existe -->
   </main>
 </body>
 

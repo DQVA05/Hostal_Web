@@ -2,28 +2,258 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">  <!--  Esto asegura que la página se vea bien en dispositivos móviles -->
-  <title>Casita de Tercera "Costamar"</title>
-  <link rel="stylesheet" th:href="@{/css/app.css}"> <!-- Esto enlaza el archivo CSS para estilos personalizados -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Imprescindible para que la página se vea bien en móviles -->
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Casita de Tercera: casa de alquiler en Costamar, La Habana, para un único grupo de hasta 6 personas.">
+  <title>Casita de Tercera · Costamar, La Habana</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+  <script th:src="@{/js/app.js}" defer></script>
 </head>
 
 <body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+  <!-- Cabecera: en el móvil la marca se desplaza y solo queda fija la fila de navegación -->
   <header class="cabecera">
-    <p class="marca">Hostal Costamar</p>
-    <h1 th:text="'Hola, ' + ${nombre}">Hola, invitado</h1>
+    <div class="contenedor cabecera-interior">
+      <a class="marca" href="#inicio">Casita de Tercera</a>
+      <nav class="navegacion" aria-label="Secciones de la página">
+        <ul>
+          <li><a href="#la-casa">La casa</a></li>
+          <li><a href="#reglas">Reglas</a></li>
+          <li><a href="#reservar">Reservar</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
-  <main class="contenido">
-    <h2 th:text="'Bienvenido a la Casita de Tercera '">Bienvenido a la Casita de Tercera</h2>
-    <p th:text="'Hoy es ' + ${fecha}">Hoy es [fecha]</p>
-    <p th:text="'El clima actual es ' + ${clima}">El clima actual es [clima]</p> <!-- luego se sacará dicha información de un API de clima. -->
-    <p th:text="'La temperatura es ' + ${temperatura} + '°C'">La temperatura es [temperatura]°C</p> <!--comentario de arriba. -->
-    <p th:text="'La capacidad máxima es de ' + ${capacidadMaxima} + ' personas'">La capacidad máxima es de [capacidadMaxima] personas</p>
+  <main id="contenido">
 
-    <p>Esta página la genera Spring Boot con Thymeleaf. El estilo viene de un
-       archivo CSS servido desde la carpeta static.</p>
-    <a class="boton" th:href="@{/reservas}">Reservar</a> <!-- la página /reservas todavía no existe -->
+    <!-- Portada -->
+    <section id="inicio" class="portada" aria-labelledby="titulo-portada">
+      <div class="contenedor portada-interior">
+        <div class="portada-texto">
+          <p class="antetitulo">Costamar, La Habana</p>
+          <h1 id="titulo-portada">Casita de Tercera</h1>
+          <p class="entradilla">Se alquila la casa completa a un único grupo de hasta 6 personas,
+            con 2 o 3 habitaciones y estancias en bloques de 24 horas.</p>
+          <div class="acciones">
+            <a class="boton boton-principal" href="#reservar">Consultar fechas</a>
+            <a class="boton boton-secundario" href="#la-casa">Conocer la casa</a>
+          </div>
+        </div>
+        <!-- TODO: foto de portada. Está en la primera pantalla, así que NO lleva loading="lazy":
+             <img th:src="@{/img/portada.jpg}" width="1200" height="900" alt="Descripción de la foto"> -->
+        <div class="foto-pendiente foto-portada" aria-hidden="true">Fotografía pendiente</div>
+      </div>
+    </section>
+
+    <!-- 1. La casa -->
+    <section id="la-casa" class="seccion" aria-labelledby="titulo-casa">
+      <div class="contenedor">
+        <h2 id="titulo-casa">La casa</h2>
+        <p class="entradilla">Se alquila la casa completa a un único grupo: 2 o 3 habitaciones, hasta 6 personas.
+          Usted dispone de la casa por 24 horas, de 10:00 a 10:00.</p>
+
+        <div class="tarifas">
+          <div class="tarifa">
+            <p class="tarifa-nombre">2 habitaciones</p>
+            <p class="tarifa-precio">100 USD</p>
+            <p class="tarifa-nota">por cada 24 horas</p>
+          </div>
+          <div class="tarifa">
+            <p class="tarifa-nombre">3 habitaciones</p>
+            <p class="tarifa-precio">150 USD</p>
+            <p class="tarifa-nota">por cada 24 horas</p>
+          </div>
+        </div>
+
+        <dl class="datos">
+          <div class="dato">
+            <dt>Capacidad</dt>
+            <dd>Hasta 6 personas, en 2 o 3 habitaciones.</dd>
+          </div>
+          <div class="dato">
+            <dt>Horario</dt>
+            <dd>Entrada a las 10:00 </dd>
+          </div>
+          <div class="dato">
+            <dt>Pago</dt>
+            <dd>Anticipo del 50 %, negociable. Pago en USD o EUR; en CUP de forma puntual, a la tasa de elTOQUE.</dd>
+          </div>
+        </dl>
+
+        <div class="servicios">
+          <div>
+            <h3>Incluido en el precio</h3>
+            <ul class="lista">
+              <li>Climatización</li>
+              <li>TV</li>
+              <li>Música</li>
+              <li>Minibar</li>
+              <li>Caja de seguridad</li>
+              <li>WiFi</li>
+              <li>Ropa de cama y toallas</li>
+              <li>Agua caliente</li>
+              <li>Piscina</li>
+              <li>Sombrillas</li>
+              <li>Tumbonas</li>
+              <li>Parqueo gratuito</li>
+              <li>Paneles solares</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Por un módico precio</h3>
+            <ul class="lista">
+              <li>Gastronomía</li>
+              <li>Transporte de 7 plazas con chofer</li>
+              
+            </ul>
+          </div>
+        </div>
+
+        <!-- TODO: fotos de la casa. Fuera de la primera pantalla, cada imagen con carga diferida:
+             <img th:src="@{/img/casa-1.jpg}" loading="lazy" decoding="async" width="1200" height="800" alt="Descripción de la foto"> -->
+        <div class="foto-pendiente foto-casa" aria-hidden="true">Fotografía pendiente</div>
+      </div>
+    </section>
+
+    <!-- 2. Reglas del local. El texto de las reglas vive SOLO aquí: el JS lo copia en el diálogo. -->
+    <section id="reglas" class="seccion" aria-labelledby="titulo-reglas">
+      <div class="contenedor contenedor-estrecho">
+        <h2 id="titulo-reglas">Reglas del local</h2>
+        <p class="entradilla">Para reservar es necesario aceptar estas reglas.</p>
+        <div id="reglas-texto" class="reglas-texto">
+          <ol class="reglas">
+            <li>Quien reserva firma el reglamento.</li>
+            <li>Quien reserva responde por los daños y por el inventario.</li>
+            <li>Quien reserva debe cumplir las normas de conducta.</li>
+            <li>El anticipo se pierde, salvo por fuerza mayor o por falla de la casa.</li>
+          </ol>
+          <!-- TODO: reglamento completo -->
+          <p class="nota">El reglamento completo estará disponible próximamente.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Reservar -->
+    <section id="reservar" class="seccion" aria-labelledby="titulo-reservar">
+      <div class="contenedor">
+        <h2 id="titulo-reservar">Reservar</h2>
+        <p class="entradilla">Seleccione primero el día de entrada y después el de salida.
+          Cada reserva es de 24 horas va de 10:00 a.m a 10:00 a.m.</p>
+        <noscript>
+          <p class="aviso">Para elegir las fechas es necesario activar JavaScript en su navegador.</p>
+        </noscript>
+
+        <div class="reserva">
+          <div class="calendario">
+            <div class="calendario-cabecera">
+              <button type="button" class="calendario-mes" id="mes-anterior" aria-label="Mes anterior">
+                <span aria-hidden="true">&lsaquo;</span>
+              </button>
+              <h3 class="calendario-titulo" id="calendario-titulo" aria-live="polite">Calendario</h3>
+              <button type="button" class="calendario-mes" id="mes-siguiente" aria-label="Mes siguiente">
+                <span aria-hidden="true">&rsaquo;</span>
+              </button>
+            </div>
+
+            <table class="calendario-tabla" aria-labelledby="calendario-titulo">
+              <thead>
+                <tr>
+                  <th scope="col"><span aria-hidden="true">L</span><span class="solo-lectores">lunes</span></th>
+                  <th scope="col"><span aria-hidden="true">M</span><span class="solo-lectores">martes</span></th>
+                  <th scope="col"><span aria-hidden="true">X</span><span class="solo-lectores">miércoles</span></th>
+                  <th scope="col"><span aria-hidden="true">J</span><span class="solo-lectores">jueves</span></th>
+                  <th scope="col"><span aria-hidden="true">V</span><span class="solo-lectores">viernes</span></th>
+                  <th scope="col"><span aria-hidden="true">S</span><span class="solo-lectores">sábado</span></th>
+                  <th scope="col"><span aria-hidden="true">D</span><span class="solo-lectores">domingo</span></th>
+                </tr>
+              </thead>
+              <tbody id="calendario-dias"></tbody>
+            </table>
+
+            <ul class="leyenda" aria-hidden="true">
+              <li><span class="muestra muestra-extremo"></span>Entrada y salida</li>
+              <li><span class="muestra muestra-rango"></span>Estancia</li>
+              <li><span class="muestra muestra-hoy"></span>Hoy</li>
+            </ul>
+            <p class="calendario-ayuda">Con el teclado: flechas para cambiar de día; Re&nbsp;Pág y Av&nbsp;Pág para cambiar de mes.</p>
+          </div>
+
+          <div class="resumen">
+            <h3>Su selección</h3>
+            <dl class="resumen-datos">
+              <div>
+                <dt>Entrada</dt>
+                <dd id="resumen-entrada">Sin seleccionar</dd>
+              </div>
+              <div>
+                <dt>Salida</dt>
+                <dd id="resumen-salida">Sin seleccionar</dd>
+              </div>
+              <div>
+                <dt>Cantidad de Noches</dt>
+                <dd id="resumen-bloques" class="resumen-bloques">&mdash;</dd>
+              </div>
+            </dl>
+            <p class="estado" id="estado-reserva" role="status">Seleccione el día de entrada.</p>
+            <div class="resumen-acciones">
+              <button type="button" class="boton boton-principal" id="boton-reservar" disabled>Reservar</button>
+              <button type="button" class="boton boton-secundario" id="boton-borrar" disabled>Borrar fechas</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
+
+  <footer class="pie">
+    <div class="contenedor pie-interior">
+      <div>
+        <p class="pie-marca">Casita de Tercera</p>
+        <p>Costamar, La Habana</p>
+        <p>Dirección:</p>
+        <p>Avenida 3era # 16224 / 162 y 162D Zona 1 Alamar Habana del Este.</p>
+        <p>Contacto:+53 54698462</p>
+      </div>
+      <a class="pie-enlace" href="#inicio">Volver al inicio</a>
+    </div>
+  </footer>
+
+  <!-- Diálogo de aceptación de reglas. Las reglas se copian aquí desde #reglas-texto. -->
+  <dialog id="dialogo-reglas" class="dialogo" aria-labelledby="dialogo-titulo">
+    <div class="dialogo-cabecera">
+      <h2 id="dialogo-titulo">Reglas del local</h2>
+    </div>
+    <div class="dialogo-cuerpo" tabindex="0" role="region" aria-label="Fechas y reglas" autofocus>
+      <dl class="dialogo-fechas">
+        <div>
+          <dt>Entrada</dt>
+          <dd id="dialogo-entrada"></dd>
+        </div>
+        <div>
+          <dt>Salida</dt>
+          <dd id="dialogo-salida"></dd>
+        </div>
+        <div>
+          <dt>Cantidad de Noches</dt>
+          <dd id="dialogo-bloques"></dd>
+        </div>
+      </dl>
+      <p>Lea las reglas antes de confirmar su solicitud:</p>
+      <div id="dialogo-reglas-texto"></div>
+    </div>
+    <div class="dialogo-pie">
+      <p class="dialogo-mensaje" id="dialogo-mensaje" role="status"></p>
+      <div class="dialogo-botones">
+        <button type="button" class="boton boton-secundario boton-aceptar" id="boton-aceptar" aria-pressed="false">Acepto las reglas</button>
+        <button type="button" class="boton boton-principal" id="boton-confirmar" disabled>Confirmar reserva</button>
+        <button type="button" class="boton boton-texto" id="boton-cancelar">Cancelar</button>
+      </div>
+    </div>
+  </dialog>
 </body>
 
 </html>

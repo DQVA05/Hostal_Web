@@ -1,104 +1,856 @@
+/* Casita de Tercera: hoja de estilos pública.
+   Mobile-first: los estilos base son para móvil (desde 360 px) y las
+   media queries del final amplían el diseño en pantallas más anchas.
+   Sin fuentes externas ni dependencias. */
 
-/* 0. Reset CSS: se eliminan los márgenes y paddings por defecto de todos los elementos.
-      Solo se resetea el espaciado; el color, la letra y el fondo se ponen en body
-      y los demás elementos los heredan. */
-* {
-  margin: 0;
-  padding: 0;
-}
-
-/* 1. Variables CSS: se definen una vez y se reutilizan.
-      Para cambiar el color de todo el sitio basta con tocar una línea.
-      Todas las combinaciones cumplen el contraste mínimo de WCAG (4.5:1). */
+/* 1. Variables CSS: colores, tipografía y medidas en un solo sitio.
+      Contrastes comprobados (WCAG AA):
+      texto/fondo 14.4:1 · suave/fondo 7.0:1 · acento/fondo 5.7:1 · blanco/principal 15.1:1 */
 :root {
-  --color-fondo: #f4f7fc;     /* fondo claro de la página */
-  --color-texto: #1d2433;     /* texto normal (14.5:1 sobre el fondo) */
-  --color-suave: #5b6476;     /* párrafos (5.5:1 sobre el fondo) */
-  --color-principal: #104fd6; /* azul de la marca (6.3:1 sobre el fondo, 6.8:1 con texto blanco) */
-  --color-principal-oscuro: #0b3a9e; /* hover del botón */
-  --espacio: 1rem;          /* rem = relativo al tamaño de letra raíz (16 px por defecto) */
+  --color-fondo: #F5F6F4;
+  --color-superficie: #FFFFFF;
+  --color-texto: #1F2428;
+  --color-suave: #4D555B;
+  --color-principal: #14283A;
+  --color-principal-oscuro: #0B1824;
+  --color-acento: #7A5C2E;
+  --color-borde: #D5D9D3;          /* bordes decorativos */
+  --color-borde-control: #8A9196;  /* borde de controles: 3.2:1 sobre blanco */
+  --color-rango: #E3E8EC;          /* días dentro de la estancia */
+  --color-desactivado: #8A9196;
+  --color-foco: #7A5C2E;
+
+  --fuente-titulos: Georgia, "Times New Roman", serif;
+  --fuente-texto: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --radio: 3px;                    /* esquinas poco redondeadas */
+  --sombra: 0 1px 2px rgb(20 40 58 / 0.06);
+  --tactil: 2.75rem;               /* 44 px: tamaño mínimo de botones y enlaces */
+  --alto-marca: 2.75rem;           /* fila de la marca en la cabecera móvil */
+  --alto-nav: 3rem;                /* fila de navegación que queda fija */
 }
 
-/* 2. Modelo de caja: así el padding y el borde se incluyen en el ancho,
-      no se suman. Evita muchos desbordes raros. */
+/* 2. Reset y modelo de caja. */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* 3. Estilos base: los hereda toda la página. */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;  /* evita que iOS agrande el texto en horizontal */
+  text-size-adjust: 100%;
+  /* Al saltar a un ancla, deja sitio para la navegación fija. */
+  scroll-padding-top: calc(var(--alto-nav) + 1.5rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 1.0625rem;
+  font-family: var(--fuente-texto);
+  font-size: 1.0625rem;            /* 17 px: texto base por encima de 16 px */
   line-height: 1.6;
   color: var(--color-texto);
   background: var(--color-fondo);
+  overflow-wrap: break-word;
 }
 
-/* 4. Títulos y texto. */
-h1 {
-  font-size: clamp(1.75rem, 5vw, 2.75rem);
+img {
+  display: block;
+  max-width: 100%;                 /* imágenes fluidas */
+  height: auto;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* 3. Tipografía. */
+h1,
+h2,
+h3 {
+  font-family: var(--fuente-titulos);
+  font-weight: 400;
   line-height: 1.2;
-  text-align: center;
   color: var(--color-principal);
 }
 
-p {
+h1 {
+  font-size: clamp(2.25rem, 1.6rem + 3vw, 3.5rem);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 1.45rem + 1.4vw, 2.25rem);
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+a {
+  color: var(--color-principal);
+}
+
+.entradilla {
+  max-width: 40rem;
   color: var(--color-suave);
+  font-size: 1.125rem;
 }
 
-/* 5. Cabecera: franja azul con texto blanco. */
-.cabecera {
-  padding: calc(var(--espacio) * 2) var(--espacio);
-  background: var(--color-principal);
-  text-align: center;
-}
-
-.cabecera .marca,
-.cabecera h1 {
-  color: #fff;
-}
-
-/* 6. Contenido: margen lateral de 1rem en el móvil y ancho máximo
-      para que las líneas no queden demasiado largas en pantallas grandes. */
-.contenido {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: calc(var(--espacio) * 2) var(--espacio);
-}
-
-.contenido > * + * {
-  margin-top: calc(var(--espacio) * 0.5); /* separa los elementos entre sí */
-}
-
-/* 7. Un enlace con forma de botón y estados interactivos. */
-.boton {
-  display: inline-block;
-  margin-top: var(--espacio);
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.5rem;
-  background: var(--color-principal);
-  color: #fff;
+.antetitulo {
+  color: var(--color-acento);
   font-weight: 600;
-  text-decoration: none;
-  transition: background 0.15s ease;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
 }
 
-.boton:hover {
-  background: var(--color-principal-oscuro);
+.nota {
+  color: var(--color-suave);
+  font-style: italic;
 }
 
-/* 8. Accesibilidad: contorno visible cuando se navega con el teclado (Tab). */
-.boton:focus-visible {
-  outline: 3px solid var(--color-principal);
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 4. Foco visible para quien navega con teclado. */
+:focus-visible {
+  outline: 3px solid var(--color-foco);
   outline-offset: 2px;
 }
 
-/* 9. Media query mobile-first: los estilos de arriba son para móvil;
-      esto solo se aplica a partir de 48rem (768 px). */
-@media (min-width: 48rem) {
-  .contenido {
-    padding-top: calc(var(--espacio) * 5);
+.saltar {
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tactil);
+  padding: 0 1rem;
+  background: var(--color-principal);
+  color: #fff;
+  border-radius: var(--radio);
+  transform: translateY(-200%);
+}
+
+.saltar:focus {
+  transform: none;
+}
+
+/* 5. Estructura general. */
+.contenedor {
+  width: 100%;
+  max-width: 68rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.contenedor-estrecho {
+  max-width: 46rem;
+}
+
+.seccion {
+  padding-block: 3.5rem;
+  border-top: 1px solid var(--color-borde);
+}
+
+/* 6. Cabecera y navegación.
+      Móvil: dos filas (marca + navegación). La cabecera es "sticky" con un
+      top negativo igual a la fila de la marca: al desplazarse, la marca sale
+      de la pantalla y solo queda fija la navegación, que ocupa poco. */
+.cabecera {
+  position: sticky;
+  top: calc(-1 * var(--alto-marca));
+  z-index: 10;
+  background: var(--color-fondo);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  height: var(--alto-marca);
+  font-family: var(--fuente-titulos);
+  font-size: 1.125rem;
+  color: var(--color-principal);
+  text-decoration: none;
+}
+
+.navegacion ul {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+  height: var(--alto-nav);
+}
+
+.navegacion a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tactil);
+  padding-inline: 0.5rem;
+  color: var(--color-texto);
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: var(--radio);
+}
+
+/* 7. Botones. Todos miden al menos 44 × 44 px. */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--tactil);
+  min-width: var(--tactil);
+  padding: 0.625rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: var(--radio);
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.boton-principal {
+  background: var(--color-principal);
+  border-color: var(--color-principal);
+  color: #fff;
+}
+
+.boton-secundario {
+  background: transparent;
+  border-color: var(--color-principal);
+  color: var(--color-principal);
+}
+
+.boton-texto {
+  background: transparent;
+  color: var(--color-principal);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.boton:disabled {
+  background: #E6E8E4;
+  border-color: #D0D4CE;
+  color: #5F676C;
+  cursor: not-allowed;
+}
+
+/* "Acepto las reglas" pulsado: color de acento y marca de verificación dibujada con CSS. */
+.boton-aceptar[aria-pressed="true"] {
+  background: var(--color-acento);
+  border-color: var(--color-acento);
+  color: #fff;
+}
+
+.boton-aceptar[aria-pressed="true"]::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.8rem;
+  margin-top: -0.2rem;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.acciones {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+/* 8. Portada. */
+.portada {
+  padding-block: 2.5rem 3rem;
+}
+
+.portada-interior {
+  display: grid;
+  gap: 2rem;
+}
+
+.portada .entradilla {
+  margin-top: 1rem;
+}
+
+/* Espacios reservados para fotos: discretos, con borde fino. */
+.foto-pendiente {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  background: #ECEEEA;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  color: var(--color-suave);
+  font-size: 0.9375rem;
+}
+
+/* 9. La casa. */
+.tarifas {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.tarifa {
+  padding: 1.25rem;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.tarifa-nombre {
+  font-family: var(--fuente-titulos);
+  font-size: 2rem;
+  line-height: 1.2;
+  color: var(--color-principal);
+}
+
+.tarifa-precio {
+ color: var(--color-suave);
+}
+
+.tarifa-nota {
+  color: var(--color-suave);
+  font-size: 1rem;
+}
+
+.datos {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.dato {
+  padding-left: 1rem;
+  border-left: 2px solid var(--color-acento);
+}
+
+.dato dt {
+  font-weight: 600;
+  color: var(--color-principal);
+}
+
+.servicios {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.lista li {
+  padding-block: 0.5rem;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.foto-casa {
+  margin-top: 2.5rem;
+}
+
+/* 10. Reglas: lista numerada con números grandes en serif. */
+.reglas {
+  counter-reset: regla;
+  margin-top: 1.5rem;
+}
+
+.reglas li {
+  counter-increment: regla;
+  position: relative;
+  padding: 0.875rem 0 0.875rem 2.75rem;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.reglas li::before {
+  content: counter(regla) ".";
+  position: absolute;
+  left: 0;
+  top: 0.75rem;
+  font-family: var(--fuente-titulos);
+  font-size: 1.25rem;
+  color: var(--color-acento);
+}
+
+.reglas-texto .nota {
+  margin-top: 1rem;
+}
+
+/* 11. Reservar: calendario y resumen. */
+.aviso {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--color-acento);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+
+.reserva {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.calendario,
+.resumen {
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+/* Padding lateral pequeño en el móvil para que cada día mida más de 40 px de ancho. */
+.calendario {
+  padding: 0.75rem 0.25rem;
+}
+
+.calendario-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-inline: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.calendario-titulo {
+  flex: 1;
+  margin: 0;
+  text-align: center;
+  font-size: 1.25rem;
+}
+
+.calendario-mes {
+  display: grid;
+  place-items: center;
+  width: var(--tactil);
+  height: var(--tactil);
+  flex: none;
+  background: var(--color-superficie);
+  border: 1px solid var(--color-borde-control);
+  border-radius: var(--radio);
+  color: var(--color-principal);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.calendario-mes:disabled {
+  border-color: var(--color-borde);
+  color: var(--color-desactivado);
+  cursor: not-allowed;
+}
+
+.calendario-tabla {
+  width: 100%;
+  table-layout: fixed;             /* 7 columnas iguales que nunca desbordan */
+  border-collapse: collapse;
+}
+
+.calendario-tabla th {
+  padding-block: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-suave);
+}
+
+.calendario-tabla td {
+  padding: 1px 0;
+}
+
+.dia {
+  display: block;
+  width: 100%;
+  min-height: var(--tactil);       /* 44 px de alto */
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radio);
+  color: var(--color-texto);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.dia:disabled {
+  color: var(--color-desactivado);
+  cursor: default;
+}
+
+.dia.es-hoy {
+  border-color: var(--color-acento);
+  font-weight: 700;
+}
+
+.dia.en-rango {
+  background: var(--color-rango);
+  border-radius: 0;
+}
+
+.dia.es-entrada,
+.dia.es-salida {
+  background: var(--color-principal);
+  border-color: var(--color-principal);
+  color: #fff;
+  font-weight: 700;
+}
+
+.dia:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline-offset: 1px;
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  padding: 0.75rem 0.5rem 0;
+  font-size: 0.9375rem;
+  color: var(--color-suave);
+}
+
+.leyenda li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.muestra {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 2px;
+}
+
+.muestra-extremo {
+  background: var(--color-principal);
+}
+
+.muestra-rango {
+  background: var(--color-rango);
+}
+
+.muestra-hoy {
+  border: 1px solid var(--color-acento);
+}
+
+/* La ayuda de teclado solo se muestra en equipos con ratón/teclado. */
+.calendario-ayuda {
+  display: none;
+  padding: 0.5rem 0.5rem 0;
+  font-size: 0.9375rem;
+  color: var(--color-suave);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .calendario-ayuda {
+    display: block;
+  }
+}
+
+.resumen {
+  padding: 1.25rem;
+}
+
+.resumen-datos > div {
+  padding-block: 0.625rem;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.resumen-datos dt {
+  font-size: 0.9375rem;
+  color: var(--color-suave);
+}
+
+.resumen-bloques {
+  font-family: var(--fuente-titulos);
+  font-size: 1.5rem;
+  color: var(--color-principal);
+}
+
+.estado {
+  margin-top: 1rem;
+  color: var(--color-suave);
+}
+
+.resumen-acciones {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+/* 12. Pie de página. Fondo oscuro, así que el foco usa un acento claro. */
+.pie {
+  --color-foco: #C9A86A;           /* 6.7:1 sobre el azul principal */
+  padding-block: 2.5rem;
+  background: var(--color-principal);
+  color: #C9D1D8;
+}
+
+.pie-interior {
+  display: grid;
+  gap: 1rem;
+}
+
+.pie-marca {
+  font-family: var(--fuente-titulos);
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.pie-enlace {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  min-height: var(--tactil);
+  color: #fff;
+  text-underline-offset: 0.2em;
+}
+
+/* 13. Diálogo de reglas.
+       Se ajusta a la pantalla: la cabecera y los botones quedan siempre a la
+       vista y solo el cuerpo (fechas + reglas) se desplaza por dentro. */
+.dialogo {
+  width: min(40rem, calc(100% - 2rem));
+  max-width: calc(100% - 2rem);
+  max-height: calc(100vh - 2rem);   /* respaldo para navegadores sin dvh */
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio);
+}
+
+.dialogo[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialogo::backdrop {
+  background: rgb(20 40 58 / 0.6);
+}
+
+.dialogo-cabecera {
+  flex: none;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.dialogo-cabecera h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.dialogo-cuerpo {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 1.25rem;
+}
+
+.dialogo-cuerpo:focus-visible {
+  outline-offset: -3px;
+}
+
+.dialogo-fechas {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-fondo);
+  border-radius: var(--radio);
+}
+
+.dialogo-fechas > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.5rem;
+}
+
+.dialogo-fechas dt {
+  font-weight: 600;
+}
+
+.dialogo-fechas dt::after {
+  content: ":";
+}
+
+.dialogo-cuerpo .reglas {
+  margin-top: 0.5rem;
+}
+
+.dialogo-pie {
+  flex: none;
+  padding: 0.75rem 1.25rem 1rem;
+  border-top: 1px solid var(--color-borde);
+}
+
+.dialogo-mensaje {
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--color-acento);
+  background: var(--color-fondo);
+}
+
+.dialogo-mensaje:empty {
+  display: none;
+}
+
+.dialogo-botones {
+  display: grid;
+  gap: 0.5rem;
+}
+
+/* 14. Estados al pasar el ratón: solo decorativos y solo en equipos con ratón.
+       Ninguna función depende de ellos. */
+@media (hover: hover) {
+  .navegacion a:hover,
+  .boton-texto:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  .boton-principal:not(:disabled):hover {
+    background: var(--color-principal-oscuro);
+  }
+
+  .boton-secundario:not(:disabled):not([aria-pressed="true"]):hover,
+  .calendario-mes:not(:disabled):hover {
+    background: var(--color-rango);
+  }
+
+  .dia:not(:disabled):not(.es-entrada):not(.es-salida):hover {
+    border-color: var(--color-borde-control);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .boton,
+  .dia,
+  .calendario-mes {
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+}
+
+/* 15. Pantallas medianas (desde 40rem = 640 px): móviles en horizontal y tabletas. */
+@media (min-width: 40rem) {
+  html {
+    scroll-padding-top: 5rem;
+  }
+
+  /* Cabecera en una sola fila, fija entera. */
+  .cabecera {
+    top: 0;
+  }
+
+  .cabecera-interior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 3.5rem;
+  }
+
+  .navegacion ul {
+    display: flex;
+    gap: 0.25rem;
+    height: auto;
+  }
+
+  .navegacion a {
+    padding-inline: 0.875rem;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .tarifas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .calendario {
+    padding: 1rem;
+  }
+
+  .resumen-acciones,
+  .dialogo-botones {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .dialogo-botones .boton-texto {
+    margin-left: auto;
+  }
+
+  .pie-interior {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+}
+
+/* 16. Pantallas grandes (desde 56rem = 896 px). */
+@media (min-width: 56rem) {
+  .contenedor {
+    padding-inline: 2rem;
+  }
+
+  .seccion {
+    padding-block: 5rem;
+  }
+
+  .portada {
+    padding-block: 4rem 5rem;
+  }
+
+  .portada-interior {
+    grid-template-columns: 1.1fr 1fr;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .foto-portada {
+    aspect-ratio: 4 / 3;
+  }
+
+  .datos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .servicios {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+
+  .reserva {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: start;
+    gap: 2rem;
   }
 }

@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+src/atad.env // así se ignora el archivo de configuración de entorno que contiene información sensible como contraseñas y credenciales.
+src/atad.env

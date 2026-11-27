@@ -1,0 +1,82 @@
+
+/* 0. Reset CSS: se eliminan los márgenes y paddings por defecto de todos los elementos.
+      Se hace un reset de los estilos por defecto del navegador. */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-texto);
+  background: var(--color-fondo);
+}
+
+/* 1. Variables CSS: se definen una vez y se reutilizan.
+      Para cambiar el color de todo el sitio basta con tocar una línea. */
+:root {
+  --color-fondo: #577dc5; /* por qué los datos están en español? porque es más fácil de recordar y de escribir. */
+  --color-texto: #1d2433;
+  --color-suave: #5b6476;
+  --color-principal: #104fd6;
+  --espacio: 1rem;          /* rem = relativo al tamaño de letra raíz (16 px por defecto) */
+}
+
+/* 2. Modelo de caja: así el padding y el borde se incluyen en el ancho,
+      no se suman. Evita muchos desbordes raros. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--color-texto);
+  background: var(--color-fondo);
+}
+h1{
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: clamp(1.75rem, 5vw, 2.75rem);
+    margin: 0 auto;
+    text-align: center;
+    line-height: 3.2;
+    color: var(--color-principal);
+}
+p {
+  color: var(--color-suave);
+}
+/* 7. Un enlace con forma de botón y estados interactivos. */
+.boton {
+  display: inline-block;
+  margin-top: var(--espacio);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  background: var(--color-principal);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.boton:hover {
+  background: #1a4fc4;
+}
+
+/* 8. Accesibilidad: contorno visible cuando se navega con el teclado (Tab). */
+.boton:focus-visible {
+  outline: 3px solid #93b4ff;
+  outline-offset: 2px;
+}
+
+/* 9. Media query mobile-first: los estilos de arriba son para móvil;
+      esto solo se aplica a partir de 48rem (768 px). */
+@media (min-width: 48rem) {
+  .contenido {
+    padding-top: calc(var(--espacio) * 5);
+  }
+}

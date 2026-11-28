@@ -1,1 +1,18 @@
 <!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+  <!-- Pie común. Los datos de dirección y contacto son los que ya figuraban en la portada. -->
+  <footer class="pie" th:fragment="pie">
+    <div class="contenedor pie-interior">
+      <address>
+        <p class="pie-marca">Casita de Tercera</p>
+        <p>Costamar, La Habana</p>
+        <p>Dirección:</p>
+        <p>Avenida 3era # 16224 / 162 y 162D Zona 1 Alamar Habana del Este.</p>
+        <p>Contacto: <a class="pie-telefono" href="tel:+5354698462">+53 54698462</a></p>
+      </address>
+      <a class="pie-enlace" th:href="@{/}">Volver al inicio</a>
+    </div>
+  </footer>
+</body>
+</html>

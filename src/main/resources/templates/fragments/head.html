@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <!-- Recursos comunes del <head>. Cada página pone antes su charset, viewport y título. -->
+  <th:block th:fragment="recursos">
+    <meta name="color-scheme" content="light dark">
+    <!-- Se ejecuta antes de pintar: aplica el tema guardado (sin destello) y marca que hay JavaScript.
+         Si no hay elección guardada, la hoja de estilos sigue prefers-color-scheme. -->
+    <script>
+      (function () {
+        var raiz = document.documentElement;
+        raiz.classList.add('js');
+        try {
+          var tema = window.localStorage.getItem('tema');
+          if (tema === 'claro' || tema === 'oscuro') {
+            raiz.setAttribute('data-tema', tema);
+          }
+        } catch (e) { /* almacenamiento no disponible: se usa el tema del sistema */ }
+      })();
+    </script>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <script th:src="@{/js/app.js}" defer></script>
+  </th:block>
+</head>
+</html>

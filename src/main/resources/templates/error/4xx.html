@@ -1,0 +1,4 @@
+<!DOCTYPE html>
+<!-- Página de error 4xx. La estructura común está en fragments/error.html. -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/error :: pagina(${status}, 'No se pudo atender su solicitud', 'Revise la dirección o vuelva a intentarlo.')}"></html>

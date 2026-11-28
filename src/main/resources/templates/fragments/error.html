@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!-- Plantilla común de las páginas de error (templates/error/*.html).
+     Solo HTML y CSS: se ve aunque falle el JavaScript.
+     No muestra trazas, excepciones ni mensajes internos: solo el código de estado. -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="pagina(codigo, titulo, mensaje)">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title th:text="${titulo} + ' · Casita de Tercera'">Error · Casita de Tercera</title>
+  <th:block th:replace="~{fragments/head :: recursos}"></th:block>
+</head>
+<body>
+  <th:block th:replace="~{fragments/header :: cabecera('error')}"></th:block>
+
+  <main id="contenido" class="pagina-error" tabindex="-1">
+    <div class="contenedor contenedor-estrecho">
+      <p class="antetitulo" th:if="${codigo != null}" th:text="'Error ' + ${codigo}">Error</p>
+      <h1 th:text="${titulo}">Error</h1>
+      <p class="entradilla" th:text="${mensaje}">Ha ocurrido un problema.</p>
+      <div class="acciones">
+        <a class="boton boton-principal" th:href="@{/}">Ir a la página de inicio</a>
+        <a class="boton boton-secundario" th:href="@{/reserva}">Ir a la reserva</a>
+      </div>
+    </div>
+  </main>
+
+  <th:block th:replace="~{fragments/footer :: pie}"></th:block>
+</body>
+</html>

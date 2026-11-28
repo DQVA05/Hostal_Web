@@ -19,4 +19,10 @@ public class HomeController {
         model.addAttribute("capacidadActual", 3); // esto describe la capacidad actual de personas en el hostal y se puede cambiar según la ocupación actual del hostal
         return "public/index";               // busca templates/saludo.html
     }
+
+    // Página de reserva: solo muestra la plantilla; todavía no recibe ni guarda datos.
+    @GetMapping("/reserva")
+    public String reserva() {
+        return "reserva";                    // templates/reserva.html
+    }
 }

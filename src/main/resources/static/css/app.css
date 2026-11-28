@@ -3,31 +3,123 @@
    media queries del final amplían el diseño en pantallas más anchas.
    Sin fuentes externas ni dependencias. */
 
-/* 1. Variables CSS: colores, tipografía y medidas en un solo sitio.
-      Contrastes comprobados (WCAG AA):
-      texto/fondo 14.4:1 · suave/fondo 7.0:1 · acento/fondo 5.7:1 · blanco/principal 15.1:1 */
+/* 1. Variables CSS: TODO color sale de aquí; ningún componente lleva colores fijos.
+      Paleta base (tabla de diseño) + colores propios del diseño existente, cada uno
+      con su equivalente oscuro. Contrastes comprobados (WCAG AA):
+      claro  — texto/fondo 14.4:1 · suave/fondo 7.0:1 · acento/fondo 5.7:1 · sobre-principal/principal 15.1:1 · error/superficie 7.5:1
+      oscuro — texto/fondo 15.0:1 · suave/superficie 7.9:1 · acento/superficie 7.7:1 · sobre-principal/principal 10.3:1 · error/superficie 8.0:1
+      Bordes de controles: 3.8:1 (claro) y 3.8:1 (oscuro) sobre la superficie. */
 :root {
-  --color-fondo: #F5F6F4;
-  --color-superficie: #FFFFFF;
-  --color-texto: #1F2428;
-  --color-suave: #4D555B;
-  --color-principal: #14283A;
-  --color-principal-oscuro: #0B1824;
-  --color-acento: #7A5C2E;
-  --color-borde: #D5D9D3;          /* bordes decorativos */
-  --color-borde-control: #8A9196;  /* borde de controles: 3.2:1 sobre blanco */
-  --color-rango: #E3E8EC;          /* días dentro de la estancia */
-  --color-desactivado: #8A9196;
-  --color-foco: #7A5C2E;
+  color-scheme: light dark;
+
+  /* Paleta base */
+  --fondo: #F5F6F4;
+  --superficie: #FFFFFF;
+  --texto: #1F2428;
+  --principal: #14283A;
+  --sobre-principal: #FFFFFF;
+  --acento: #7A5C2E;
+  --borde: #7C858D;                /* borde de controles */
+  --error: #A12622;
+
+  /* Colores propios del diseño existente */
+  --texto-suave: #4D555B;
+  --principal-hover: #0B1824;
+  --sobre-acento: #FFFFFF;
+  --borde-suave: #D5D9D3;          /* separadores decorativos */
+  --rango: #E3E8EC;                /* días dentro de la estancia */
+  --desactivado: #8A9196;          /* días no disponibles */
+  --inactivo-fondo: #E6E8E4;       /* botones deshabilitados */
+  --inactivo-borde: #D0D4CE;
+  --inactivo-texto: #5F676C;
+  --marcador: #ECEEEA;             /* hueco de foto */
+  --esqueleto: #E4E7E2;
+  --esqueleto-brillo: #F3F4F1;
+  --velo: rgb(20 40 58 / 0.6);     /* fondo tras el diálogo */
+  --sombra: 0 1px 2px rgb(20 40 58 / 0.06);
+  --sombra-flotante: 0 2px 6px rgb(20 40 58 / 0.25);
+  --pie-fondo: #14283A;
+  --pie-texto: #C9D1D8;            /* 9.8:1 sobre el pie */
+  --pie-titulo: #FFFFFF;
+  --pie-foco: #C9A86A;             /* 6.7:1 sobre el pie */
+  --foco: var(--acento);
 
   --fuente-titulos: Georgia, "Times New Roman", serif;
   --fuente-texto: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   --radio: 3px;                    /* esquinas poco redondeadas */
-  --sombra: 0 1px 2px rgb(20 40 58 / 0.06);
   --tactil: 2.75rem;               /* 44 px: tamaño mínimo de botones y enlaces */
   --alto-marca: 2.75rem;           /* fila de la marca en la cabecera móvil */
   --alto-nav: 3rem;                /* fila de navegación que queda fija */
+}
+
+/* Tema oscuro: se aplica si el sistema lo pide y el visitante no eligió el claro,
+   o si eligió el oscuro con el botón. Los dos bloques tienen los mismos valores. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) {
+    --fondo: #11161B;
+    --superficie: #1A2229;
+    --texto: #E8EAE6;
+    --principal: #A9C6DF;
+    --sobre-principal: #11161B;
+    --acento: #D3AE74;
+    --borde: #6F7D89;
+    --error: #F2A29D;
+    --texto-suave: #AEB7BF;
+    --principal-hover: #C7DBEC;
+    --sobre-acento: #11161B;
+    --borde-suave: #2E3A44;
+    --rango: #2A3A48;
+    --desactivado: #6F7A84;
+    --inactivo-fondo: #252E36;
+    --inactivo-borde: #34404A;
+    --inactivo-texto: #9AA4AD;
+    --marcador: #222B33;
+    --esqueleto: #222B33;
+    --esqueleto-brillo: #2E3943;
+    --velo: rgb(0 0 0 / 0.7);
+    --sombra: none;
+    --sombra-flotante: 0 2px 6px rgb(0 0 0 / 0.5);
+    --pie-fondo: #0B1015;
+    --pie-texto: #B4BDC5;
+    --pie-titulo: #E8EAE6;
+    --pie-foco: #D3AE74;
+  }
+}
+
+:root[data-tema="oscuro"] {
+  color-scheme: dark;
+  --fondo: #11161B;
+  --superficie: #1A2229;
+  --texto: #E8EAE6;
+  --principal: #A9C6DF;
+  --sobre-principal: #11161B;
+  --acento: #D3AE74;
+  --borde: #6F7D89;
+  --error: #F2A29D;
+  --texto-suave: #AEB7BF;
+  --principal-hover: #C7DBEC;
+  --sobre-acento: #11161B;
+  --borde-suave: #2E3A44;
+  --rango: #2A3A48;
+  --desactivado: #6F7A84;
+  --inactivo-fondo: #252E36;
+  --inactivo-borde: #34404A;
+  --inactivo-texto: #9AA4AD;
+  --marcador: #222B33;
+  --esqueleto: #222B33;
+  --esqueleto-brillo: #2E3943;
+  --velo: rgb(0 0 0 / 0.7);
+  --sombra: none;
+  --sombra-flotante: 0 2px 6px rgb(0 0 0 / 0.5);
+  --pie-fondo: #0B1015;
+  --pie-texto: #B4BDC5;
+  --pie-titulo: #E8EAE6;
+  --pie-foco: #D3AE74;
+}
+
+:root[data-tema="claro"] {
+  color-scheme: light;
 }
 
 /* 2. Reset y modelo de caja. */
@@ -42,10 +134,14 @@
   padding: 0;
 }
 
+[hidden] {
+  display: none !important;        /* que ningún display de componente lo anule */
+}
+
 html {
   -webkit-text-size-adjust: 100%;  /* evita que iOS agrande el texto en horizontal */
   text-size-adjust: 100%;
-  /* Al saltar a un ancla, deja sitio para la navegación fija. */
+  /* Al saltar a un ancla o enfocar un campo, deja sitio para la navegación fija. */
   scroll-padding-top: calc(var(--alto-nav) + 1.5rem);
 }
 
@@ -59,8 +155,8 @@ body {
   font-family: var(--fuente-texto);
   font-size: 1.0625rem;            /* 17 px: texto base por encima de 16 px */
   line-height: 1.6;
-  color: var(--color-texto);
-  background: var(--color-fondo);
+  color: var(--texto);
+  background: var(--fondo);
   overflow-wrap: break-word;
 }
 
@@ -70,7 +166,8 @@ img {
   height: auto;
 }
 
-button {
+button,
+input {
   font: inherit;
   color: inherit;
 }
@@ -80,6 +177,10 @@ ol {
   list-style: none;
 }
 
+address {
+  font-style: normal;
+}
+
 /* 3. Tipografía. */
 h1,
 h2,
@@ -87,7 +188,7 @@ h3 {
   font-family: var(--fuente-titulos);
   font-weight: 400;
   line-height: 1.2;
-  color: var(--color-principal);
+  color: var(--principal);
 }
 
 h1 {
@@ -105,24 +206,29 @@ h3 {
 }
 
 a {
-  color: var(--color-principal);
+  color: var(--principal);
+  text-underline-offset: 0.2em;
+}
+
+a:active {
+  color: var(--acento);
 }
 
 .entradilla {
   max-width: 40rem;
-  color: var(--color-suave);
+  color: var(--texto-suave);
   font-size: 1.125rem;
 }
 
 .antetitulo {
-  color: var(--color-acento);
+  color: var(--acento);
   font-weight: 600;
   letter-spacing: 0.04em;
   margin-bottom: 0.5rem;
 }
 
 .nota {
-  color: var(--color-suave);
+  color: var(--texto-suave);
   font-style: italic;
 }
 
@@ -138,8 +244,13 @@ a {
 
 /* 4. Foco visible para quien navega con teclado. */
 :focus-visible {
-  outline: 3px solid var(--color-foco);
+  outline: 3px solid var(--foco);
   outline-offset: 2px;
+}
+
+/* Destinos de foco programático (main con tabindex="-1"): no son controles. */
+[tabindex="-1"]:focus {
+  outline: none;
 }
 
 .saltar {
@@ -151,8 +262,8 @@ a {
   align-items: center;
   min-height: var(--tactil);
   padding: 0 1rem;
-  background: var(--color-principal);
-  color: #fff;
+  background: var(--principal);
+  color: var(--sobre-principal);
   border-radius: var(--radio);
   transform: translateY(-200%);
 }
@@ -175,7 +286,16 @@ a {
 
 .seccion {
   padding-block: 3.5rem;
-  border-top: 1px solid var(--color-borde);
+  border-top: 1px solid var(--borde-suave);
+}
+
+.aviso {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--acento);
+  border-left-width: 4px;
+  border-radius: var(--radio);
+  background: var(--superficie);
 }
 
 /* 6. Cabecera y navegación.
@@ -186,17 +306,25 @@ a {
   position: sticky;
   top: calc(-1 * var(--alto-marca));
   z-index: 10;
-  background: var(--color-fondo);
-  border-bottom: 1px solid var(--color-borde);
+  background: var(--fondo);
+  border-bottom: 1px solid var(--borde-suave);
+}
+
+.cabecera-marca {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  height: var(--alto-marca);
 }
 
 .marca {
   display: flex;
   align-items: center;
-  height: var(--alto-marca);
+  min-height: var(--tactil);
   font-family: var(--fuente-titulos);
   font-size: 1.125rem;
-  color: var(--color-principal);
+  color: var(--principal);
   text-decoration: none;
 }
 
@@ -213,13 +341,85 @@ a {
   justify-content: center;
   min-height: var(--tactil);
   padding-inline: 0.5rem;
-  color: var(--color-texto);
+  color: var(--texto);
   font-weight: 500;
   text-decoration: none;
   border-radius: var(--radio);
 }
 
-/* 7. Botones. Todos miden al menos 44 × 44 px. */
+/* Página actual: color, grosor y una barra inferior (no depende solo del color). */
+.navegacion a[aria-current="page"] {
+  color: var(--principal);
+  font-weight: 700;
+  box-shadow: inset 0 -3px 0 var(--acento);
+}
+
+/* Botón de tema: solo existe con JavaScript (la clase .js la pone el <head>). */
+.boton-tema {
+  display: none;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: var(--tactil);
+  min-width: var(--tactil);
+  padding: 0 0.625rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.js .boton-tema {
+  display: inline-flex;
+}
+
+.boton-tema:active {
+  background: var(--rango);
+}
+
+.icono {
+  display: block;
+  flex: none;
+}
+
+/* El texto y el icono indican lo que hará el botón: en claro, "Modo oscuro"; en oscuro, "Modo claro". */
+.texto-a-claro,
+.icono-sol {
+  display: none;
+}
+
+:root[data-tema="oscuro"] .texto-a-oscuro,
+:root[data-tema="oscuro"] .icono-luna {
+  display: none;
+}
+
+:root[data-tema="oscuro"] .texto-a-claro {
+  display: inline;
+}
+
+:root[data-tema="oscuro"] .icono-sol {
+  display: block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="claro"]) .texto-a-oscuro,
+  :root:not([data-tema="claro"]) .icono-luna {
+    display: none;
+  }
+
+  :root:not([data-tema="claro"]) .texto-a-claro {
+    display: inline;
+  }
+
+  :root:not([data-tema="claro"]) .icono-sol {
+    display: block;
+  }
+}
+
+/* 7. Botones. Todos miden al menos 44 × 44 px.
+      Estados: reposo, hover (sección 21), focus-visible (sección 4), activo,
+      seleccionado (aria-pressed) y deshabilitado. */
 .boton {
   display: inline-flex;
   align-items: center;
@@ -238,36 +438,51 @@ a {
 }
 
 .boton-principal {
-  background: var(--color-principal);
-  border-color: var(--color-principal);
-  color: #fff;
+  background: var(--principal);
+  border-color: var(--principal);
+  color: var(--sobre-principal);
+}
+
+.boton-principal:not(:disabled):active {
+  background: var(--principal-hover);
+  border-color: var(--principal-hover);
+  color: var(--sobre-principal);
 }
 
 .boton-secundario {
   background: transparent;
-  border-color: var(--color-principal);
-  color: var(--color-principal);
+  border-color: var(--principal);
+  color: var(--principal);
+}
+
+.boton-secundario:not(:disabled):active {
+  background: var(--rango);
+  color: var(--principal);
 }
 
 .boton-texto {
   background: transparent;
-  color: var(--color-principal);
+  color: var(--principal);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 
+.boton-texto:active {
+  color: var(--acento);
+}
+
 .boton:disabled {
-  background: #E6E8E4;
-  border-color: #D0D4CE;
-  color: #5F676C;
+  background: var(--inactivo-fondo);
+  border-color: var(--inactivo-borde);
+  color: var(--inactivo-texto);
   cursor: not-allowed;
 }
 
 /* "Acepto las reglas" pulsado: color de acento y marca de verificación dibujada con CSS. */
 .boton-aceptar[aria-pressed="true"] {
-  background: var(--color-acento);
-  border-color: var(--color-acento);
-  color: #fff;
+  background: var(--acento);
+  border-color: var(--acento);
+  color: var(--sobre-acento);
 }
 
 .boton-aceptar[aria-pressed="true"]::before {
@@ -300,49 +515,148 @@ a {
   margin-top: 1rem;
 }
 
-/* Espacios reservados para fotos: discretos, con borde fino. */
-.foto-pendiente {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 16 / 9;
-  background: #ECEEEA;
-  border: 1px solid var(--color-borde);
-  border-radius: var(--radio);
-  color: var(--color-suave);
-  font-size: 0.9375rem;
+/* 9. Fotos y esqueletos de carga.
+      El marco tiene la proporción final (aspect-ratio), así que nada salta al cargar.
+      Sin foto: marcador estático. Cargando: brillo suave (solo con JS y sin movimiento
+      reducido). Si la foto falla, app.js la quita y deja un marcador estático. */
+.foto {
+  margin: 0;
 }
 
-/* 9. La casa. */
-.tarifas {
+.foto-marco {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--marcador);
+  border: 1px solid var(--borde-suave);
+  border-radius: var(--radio);
+}
+
+.foto-marco img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.foto-marcador {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  color: var(--texto-suave);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.foto figcaption {
+  margin-top: 0.5rem;
+  color: var(--texto-suave);
+}
+
+.esqueleto {
+  display: block;
+  background-color: var(--esqueleto);
+  border-radius: var(--radio);
+}
+
+.js .foto-marco.cargando {
+  background-color: var(--esqueleto);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .esqueleto,
+  .js .foto-marco.cargando {
+    background-image: linear-gradient(90deg, transparent 0, var(--esqueleto-brillo) 50%, transparent 100%);
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    animation: brillo 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes brillo {
+  from { background-position: 200% 0; }
+  to { background-position: -100% 0; }
+}
+
+/* 10. Beneficios: el bloque más destacado de la portada. */
+.beneficios {
+  background: var(--superficie);
+}
+
+.beneficios h2 {
+  font-size: clamp(2rem, 1.55rem + 2vw, 2.75rem);
+}
+
+.destacados {
   display: grid;
   gap: 1rem;
   margin-top: 2rem;
 }
 
-.tarifa {
-  padding: 1.25rem;
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
+.destacado {
+  display: grid;
+  gap: 0.25rem;
+  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  background: var(--fondo);
+  border-left: 4px solid var(--acento);
   border-radius: var(--radio);
-  box-shadow: var(--sombra);
 }
 
-.tarifa-nombre {
+.destacado-titulo {
   font-family: var(--fuente-titulos);
-  font-size: 2rem;
-  line-height: 1.2;
-  color: var(--color-principal);
+  font-size: clamp(1.75rem, 1.5rem + 1.2vw, 2.25rem);
+  line-height: 1.15;
+  color: var(--principal);
 }
 
-.tarifa-precio {
- color: var(--color-suave);
+.destacado-texto {
+  font-size: 1.125rem;
+  color: var(--texto-suave);
 }
 
-.tarifa-nota {
-  color: var(--color-suave);
-  font-size: 1rem;
+.grupos-beneficios {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
+.grupo-beneficios {
+  padding: 1.25rem;
+  border: 1px solid var(--borde-suave);
+  border-top: 3px solid var(--principal);
+  border-radius: var(--radio);
+}
+
+.grupo-beneficios h3 {
+  font-size: 1.5rem;
+}
+
+.lista-beneficios li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 2rem;
+  font-size: 1.125rem;
+  border-bottom: 1px solid var(--borde-suave);
+}
+
+.lista-beneficios li:last-child {
+  border-bottom: 0;
+}
+
+/* Marca de verificación dibujada con CSS. */
+.lista-beneficios li::before {
+  content: "";
+  position: absolute;
+  left: 0.375rem;
+  top: 0.8rem;
+  width: 0.45rem;
+  height: 0.85rem;
+  border: solid var(--acento);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* 11. La casa. */
 .datos {
   display: grid;
   gap: 1.25rem;
@@ -351,40 +665,81 @@ a {
 
 .dato {
   padding-left: 1rem;
-  border-left: 2px solid var(--color-acento);
+  border-left: 2px solid var(--acento);
 }
 
 .dato dt {
   font-weight: 600;
-  color: var(--color-principal);
+  color: var(--principal);
 }
 
-.servicios {
+.galeria {
   display: grid;
-  gap: 2rem;
+  gap: 1.5rem;
   margin-top: 2.5rem;
+}
+
+/* 12. Precios. */
+.tarifas {
+  display: grid;
+  gap: 1rem;
+}
+
+.tarifa {
+  padding: 1.25rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde-suave);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.tarifa-nombre {
+  font-family: var(--fuente-titulos);
+  font-size: 2rem;
+  line-height: 1.2;
+  color: var(--principal);
+}
+
+.tarifa-precio {
+ color: var(--texto-suave);
+}
+
+.tarifa-nota {
+  color: var(--texto-suave);
+  font-size: 1rem;
+}
+
+.aparte {
+  margin-top: 2.5rem;
+  max-width: 40rem;
+}
+
+.aparte > p {
+  color: var(--texto-suave);
+  margin-bottom: 0.5rem;
 }
 
 .lista li {
   padding-block: 0.5rem;
-  border-bottom: 1px solid var(--color-borde);
+  border-bottom: 1px solid var(--borde-suave);
 }
 
-.foto-casa {
-  margin-top: 2.5rem;
+/* 13. Llamada a reservar. */
+.llamada {
+  background: var(--superficie);
 }
 
-/* 10. Reglas: lista numerada con números grandes en serif. */
+/* 14. Reglas: lista numerada con números grandes en serif. */
 .reglas {
   counter-reset: regla;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .reglas li {
   counter-increment: regla;
   position: relative;
   padding: 0.875rem 0 0.875rem 2.75rem;
-  border-bottom: 1px solid var(--color-borde);
+  border-bottom: 1px solid var(--borde-suave);
 }
 
 .reglas li::before {
@@ -394,39 +749,99 @@ a {
   top: 0.75rem;
   font-family: var(--fuente-titulos);
   font-size: 1.25rem;
-  color: var(--color-acento);
+  color: var(--acento);
 }
 
 .reglas-texto .nota {
   margin-top: 1rem;
 }
 
-/* 11. Reservar: calendario y resumen. */
-.aviso {
-  margin-top: 1rem;
-  padding: 1rem;
-  border: 1px solid var(--color-acento);
-  border-radius: var(--radio);
-  background: var(--color-superficie);
+/* 15. Página de reserva. */
+.pagina-reserva {
+  padding-block: 2rem 4rem;
 }
 
-.reserva {
-  display: grid;
-  gap: 1.5rem;
+.contenedor-reserva {
+  max-width: 62rem;
+}
+
+.titulo-pagina {
+  margin-bottom: 0.75rem;
+}
+
+.bloque-reglas {
   margin-top: 2rem;
+  padding: 1.25rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde-suave);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.bloque-reglas h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.formulario {
+  display: grid;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+/* Grupos con título (fieldset + legend). min-width: 0 evita que el fieldset
+   se ensanche con la tabla del calendario y provoque desplazamiento horizontal. */
+.grupo {
+  min-width: 0;
+  border: 0;
+}
+
+.grupo legend {
+  float: left;                     /* hace que la leyenda se comporte como un título normal */
+  width: 100%;
+}
+
+.grupo legend + * {
+  clear: both;
+}
+
+.grupo legend h2 {
+  margin-bottom: 0.25rem;
+}
+
+.grupo-ayuda {
+  color: var(--texto-suave);
+  margin-bottom: 1rem;
+}
+
+/* Calendario, leyenda y selección van juntos (12 px entre ellos). */
+.fechas {
+  display: grid;
+  gap: 0.75rem;
 }
 
 .calendario,
+.seleccion,
 .resumen {
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde);
+  background: var(--superficie);
+  border: 1px solid var(--borde-suave);
   border-radius: var(--radio);
   box-shadow: var(--sombra);
+}
+
+/* Sin JavaScript el calendario no funciona: se oculta y se muestra el <noscript>. */
+html:not(.js) .calendario,
+html:not(.js) .seleccion {
+  display: none;
 }
 
 /* Padding lateral pequeño en el móvil para que cada día mida más de 40 px de ancho. */
 .calendario {
   padding: 0.75rem 0.25rem;
+}
+
+.calendario.con-error {
+  border: 2px solid var(--error);
 }
 
 .calendario-cabecera {
@@ -451,18 +866,22 @@ a {
   width: var(--tactil);
   height: var(--tactil);
   flex: none;
-  background: var(--color-superficie);
-  border: 1px solid var(--color-borde-control);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
   border-radius: var(--radio);
-  color: var(--color-principal);
+  color: var(--principal);
   font-size: 1.75rem;
   line-height: 1;
   cursor: pointer;
 }
 
+.calendario-mes:not(:disabled):active {
+  background: var(--rango);
+}
+
 .calendario-mes:disabled {
-  border-color: var(--color-borde);
-  color: var(--color-desactivado);
+  border-color: var(--borde-suave);
+  color: var(--desactivado);
   cursor: not-allowed;
 }
 
@@ -474,47 +893,59 @@ a {
 
 .calendario-tabla th {
   padding-block: 0.25rem;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--color-suave);
+  color: var(--texto-suave);
 }
 
 .calendario-tabla td {
   padding: 1px 0;
 }
 
+/* El esqueleto mide lo mismo que un día (44 px de alto): el calendario no salta. */
+.esqueleto-dia {
+  height: var(--tactil);
+  margin-inline: 2px;
+}
+
+/* Días. Estados: reposo, hover, focus-visible, activo, seleccionado
+   (entrada/salida y estancia), hoy, deshabilitado. */
 .dia {
   display: block;
   width: 100%;
-  min-height: var(--tactil);       /* 44 px de alto */
+  min-height: var(--tactil);       /* 44 px de alto; el ancho es ≥ 40 px desde 360 px */
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--radio);
-  color: var(--color-texto);
+  color: var(--texto);
   font-size: 1rem;
   cursor: pointer;
 }
 
+.dia:not(:disabled):active {
+  background: var(--rango);
+}
+
 .dia:disabled {
-  color: var(--color-desactivado);
-  cursor: default;
+  color: var(--desactivado);
+  cursor: not-allowed;
 }
 
 .dia.es-hoy {
-  border-color: var(--color-acento);
+  border-color: var(--acento);
   font-weight: 700;
 }
 
 .dia.en-rango {
-  background: var(--color-rango);
+  background: var(--rango);
   border-radius: 0;
 }
 
 .dia.es-entrada,
 .dia.es-salida {
-  background: var(--color-principal);
-  border-color: var(--color-principal);
-  color: #fff;
+  background: var(--principal);
+  border-color: var(--principal);
+  color: var(--sobre-principal);
   font-weight: 700;
 }
 
@@ -529,8 +960,8 @@ a {
   flex-wrap: wrap;
   gap: 0.5rem 1.25rem;
   padding: 0.75rem 0.5rem 0;
-  font-size: 0.9375rem;
-  color: var(--color-suave);
+  font-size: 1rem;
+  color: var(--texto-suave);
 }
 
 .leyenda li {
@@ -546,23 +977,28 @@ a {
 }
 
 .muestra-extremo {
-  background: var(--color-principal);
+  background: var(--principal);
 }
 
 .muestra-rango {
-  background: var(--color-rango);
+  background: var(--rango);
+  border: 1px solid var(--borde);
 }
 
 .muestra-hoy {
-  border: 1px solid var(--color-acento);
+  border: 1px solid var(--acento);
+}
+
+.calendario-error {
+  margin: 0.75rem 0.5rem 0;
 }
 
 /* La ayuda de teclado solo se muestra en equipos con ratón/teclado. */
 .calendario-ayuda {
   display: none;
   padding: 0.5rem 0.5rem 0;
-  font-size: 0.9375rem;
-  color: var(--color-suave);
+  font-size: 1rem;
+  color: var(--texto-suave);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -571,43 +1007,227 @@ a {
   }
 }
 
+.seleccion {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.seleccion-datos > div,
+.resumen-datos > div {
+  padding-block: 0.5rem;
+  border-bottom: 1px solid var(--borde-suave);
+}
+
+.seleccion-datos dt,
+.resumen-datos dt {
+  font-size: 1rem;
+  color: var(--texto-suave);
+}
+
+.seleccion-datos dd,
+.resumen-datos dd {
+  font-weight: 600;
+}
+
+.estado {
+  color: var(--texto-suave);
+}
+
+.estado:empty {
+  display: none;
+}
+
+/* Campos. Ley de proximidad: etiqueta, ayuda, campo y error forman un bloque
+   (6 px por dentro) y los bloques se separan 22 px entre sí. */
+.campos {
+  display: grid;
+  gap: 1.375rem;
+}
+
+.campo {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.campo label {
+  font-weight: 600;
+}
+
+.campo-ayuda {
+  font-size: 1rem;
+  color: var(--texto-suave);
+}
+
+.campo input {
+  width: 100%;
+  min-height: var(--tactil);
+  padding: 0.5rem 0.75rem;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-size: 1.0625rem;            /* ≥ 16 px: iOS no amplía la página al enfocar */
+}
+
+.campo input:focus-visible {
+  outline-offset: 1px;
+}
+
+.campo input:disabled {
+  background: var(--inactivo-fondo);
+  border-color: var(--inactivo-borde);
+  color: var(--inactivo-texto);
+  cursor: not-allowed;
+}
+
+/* Error: borde más grueso + icono + texto (el color no es la única señal). */
+.campo input[aria-invalid="true"] {
+  border: 2px solid var(--error);
+  padding: calc(0.5rem - 1px) calc(0.75rem - 1px);
+}
+
+.campo-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--error);
+  font-weight: 600;
+}
+
+.campo-error::before {
+  content: "!";
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.2em;
+  border-radius: 50%;
+  background: var(--error);
+  color: var(--superficie);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Casilla de ofertas, pegada a su aviso de uso de datos. */
+.consentimiento {
+  display: grid;
+  gap: 0.375rem;
+}
+
+.aviso-datos {
+  color: var(--texto-suave);
+}
+
+.casilla {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: var(--tactil);
+  cursor: pointer;
+}
+
+.casilla input {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  accent-color: var(--principal);
+  cursor: pointer;
+}
+
+/* Resumen: fechas, precio y botón juntos. */
 .resumen {
   padding: 1.25rem;
 }
 
-.resumen-datos > div {
-  padding-block: 0.625rem;
-  border-bottom: 1px solid var(--color-borde);
+.resumen h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.resumen-datos dt {
-  font-size: 0.9375rem;
-  color: var(--color-suave);
-}
-
-.resumen-bloques {
+.resumen-noches {
   font-family: var(--fuente-titulos);
   font-size: 1.5rem;
-  color: var(--color-principal);
+  font-weight: 400;
+  color: var(--principal);
 }
 
-.estado {
-  margin-top: 1rem;
-  color: var(--color-suave);
+.precios {
+  width: 100%;
+  margin-top: 1.25rem;
+  border-collapse: collapse;
+}
+
+.precios caption {
+  padding-bottom: 0.25rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--principal);
+}
+
+.precios th,
+.precios td {
+  padding: 0.5rem 0.25rem;
+  text-align: left;
+  border-bottom: 1px solid var(--borde-suave);
+}
+
+.precios thead th {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.precios thead th + th,
+.precios td {
+  text-align: right;
+}
+
+.precios td {
+  white-space: nowrap;             /* "100 USD" no se parte en dos líneas */
+}
+
+.precios tbody th {
+  font-weight: 400;
+}
+
+.precio-total {
+  font-weight: 700;
+}
+
+.precio-nota {
+  margin-top: 0.75rem;
+  color: var(--texto-suave);
 }
 
 .resumen-acciones {
   display: grid;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
 }
 
-/* 12. Pie de página. Fondo oscuro, así que el foco usa un acento claro. */
+.ayuda-boton {
+  color: var(--texto-suave);
+}
+
+.estado-formulario {
+  color: var(--error);
+  font-weight: 600;
+}
+
+/* 16. Pie de página. Fondo oscuro, así que el foco usa un acento claro. */
 .pie {
-  --color-foco: #C9A86A;           /* 6.7:1 sobre el azul principal */
+  --foco: var(--pie-foco);
   padding-block: 2.5rem;
-  background: var(--color-principal);
-  color: #C9D1D8;
+  background: var(--pie-fondo);
+  color: var(--pie-texto);
+}
+
+/* En la reserva deja sitio para que el botón "Volver arriba" no tape el final. */
+.con-volver-arriba .pie {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
 }
 
 .pie-interior {
@@ -618,19 +1238,27 @@ a {
 .pie-marca {
   font-family: var(--fuente-titulos);
   font-size: 1.25rem;
-  color: #fff;
+  color: var(--pie-titulo);
 }
 
+.pie-telefono,
 .pie-enlace {
   display: inline-flex;
   align-items: center;
-  justify-self: start;
   min-height: var(--tactil);
-  color: #fff;
+  color: var(--pie-titulo);
   text-underline-offset: 0.2em;
 }
 
-/* 13. Diálogo de reglas.
+.pie-enlace {
+  justify-self: start;
+}
+
+.pie a:active {
+  color: var(--pie-foco);
+}
+
+/* 17. Diálogo de reglas.
        Se ajusta a la pantalla: la cabecera y los botones quedan siempre a la
        vista y solo el cuerpo (fechas + reglas) se desplaza por dentro. */
 .dialogo {
@@ -641,9 +1269,9 @@ a {
   margin: auto;
   padding: 0;
   overflow: hidden;
-  background: var(--color-superficie);
-  color: var(--color-texto);
-  border: 1px solid var(--color-borde);
+  background: var(--superficie);
+  color: var(--texto);
+  border: 1px solid var(--borde-suave);
   border-radius: var(--radio);
 }
 
@@ -652,14 +1280,20 @@ a {
   flex-direction: column;
 }
 
+/* Respaldo para navegadores sin <dialog>: cerrado no se ve. */
+.dialogo:not([open]) {
+  display: none;
+}
+
+/* Los navegadores antiguos no pasan las variables a ::backdrop: el segundo valor de var() es el respaldo. */
 .dialogo::backdrop {
-  background: rgb(20 40 58 / 0.6);
+  background: var(--velo, rgb(20 40 58 / 0.6));
 }
 
 .dialogo-cabecera {
   flex: none;
   padding: 1rem 1.25rem 0.75rem;
-  border-bottom: 1px solid var(--color-borde);
+  border-bottom: 1px solid var(--borde-suave);
 }
 
 .dialogo-cabecera h2 {
@@ -682,7 +1316,7 @@ a {
 .dialogo-fechas {
   margin-bottom: 1rem;
   padding: 0.75rem 1rem;
-  background: var(--color-fondo);
+  background: var(--fondo);
   border-radius: var(--radio);
 }
 
@@ -707,14 +1341,14 @@ a {
 .dialogo-pie {
   flex: none;
   padding: 0.75rem 1.25rem 1rem;
-  border-top: 1px solid var(--color-borde);
+  border-top: 1px solid var(--borde-suave);
 }
 
 .dialogo-mensaje {
   margin-bottom: 0.75rem;
   padding: 0.75rem 1rem;
-  border-left: 3px solid var(--color-acento);
-  background: var(--color-fondo);
+  border-left: 3px solid var(--acento);
+  background: var(--fondo);
 }
 
 .dialogo-mensaje:empty {
@@ -726,9 +1360,72 @@ a {
   gap: 0.5rem;
 }
 
-/* 14. Estados al pasar el ratón: solo decorativos y solo en equipos con ratón.
-       Ninguna función depende de ellos. */
+/* 18. Volver arriba: fijo abajo a la derecha, respetando la zona segura del móvil.
+       reserva.js lo muestra (.es-visible) tras una pantalla de desplazamiento y lo
+       oculta si taparía un control, si hay un campo enfocado o con el diálogo abierto. */
+.volver-arriba {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  width: 3rem;                     /* 48 px */
+  height: 3rem;
+  background: var(--principal);
+  border: 2px solid var(--superficie);
+  border-radius: 50%;
+  box-shadow: var(--sombra-flotante);
+  color: var(--sobre-principal);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.volver-arriba.es-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.volver-arriba:active {
+  background: var(--principal-hover);
+}
+
+/* 19. Páginas de error. */
+.pagina-error {
+  padding-block: 3.5rem 4.5rem;
+}
+
+.pagina-error h1 {
+  margin-bottom: 1rem;
+}
+
+/* 20. Modo de alto contraste de Windows: la selección sigue siendo visible. */
+@media (forced-colors: active) {
+  .dia.es-entrada,
+  .dia.es-salida {
+    forced-color-adjust: none;
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+  }
+
+  .dia.en-rango {
+    border-color: Highlight;
+  }
+
+  .boton-aceptar[aria-pressed="true"] {
+    border-width: 3px;
+  }
+}
+
+/* 21. Estados al pasar el ratón: solo decorativos y solo en equipos con ratón.
+       Ninguna función depende de ellos y los elementos deshabilitados no reaccionan. */
 @media (hover: hover) {
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+
   .navegacion a:hover,
   .boton-texto:hover {
     text-decoration: underline;
@@ -736,28 +1433,52 @@ a {
   }
 
   .boton-principal:not(:disabled):hover {
-    background: var(--color-principal-oscuro);
+    background: var(--principal-hover);
+    border-color: var(--principal-hover);
   }
 
   .boton-secundario:not(:disabled):not([aria-pressed="true"]):hover,
   .calendario-mes:not(:disabled):hover {
-    background: var(--color-rango);
+    background: var(--rango);
+  }
+
+  .boton-tema:hover {
+    border-color: var(--borde);
   }
 
   .dia:not(:disabled):not(.es-entrada):not(.es-salida):hover {
-    border-color: var(--color-borde-control);
+    border-color: var(--borde);
+  }
+
+  .campo input:not(:disabled):not([aria-invalid="true"]):hover {
+    border-color: var(--texto-suave);
+  }
+
+  .casilla:hover span {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .volver-arriba:hover {
+    background: var(--principal-hover);
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .boton,
+  .boton-tema,
   .dia,
-  .calendario-mes {
+  .calendario-mes,
+  .campo input {
     transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .volver-arriba {
+    transition: opacity 0.2s ease, visibility 0.2s ease;
   }
 }
 
-/* 15. Pantallas medianas (desde 40rem = 640 px): móviles en horizontal y tabletas. */
+/* 22. Pantallas medianas (desde 40rem = 640 px): móviles en horizontal y tabletas. */
 @media (min-width: 40rem) {
   html {
     scroll-padding-top: 5rem;
@@ -771,9 +1492,21 @@ a {
   .cabecera-interior {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
     height: 3.5rem;
+  }
+
+  /* La marca va a la izquierda, la navegación en el centro-derecha y el botón de tema al final. */
+  .cabecera-marca {
+    display: contents;
+  }
+
+  .marca {
+    margin-right: auto;
+  }
+
+  .boton-tema {
+    order: 3;
   }
 
   .navegacion ul {
@@ -791,7 +1524,9 @@ a {
     flex-wrap: wrap;
   }
 
-  .tarifas {
+  .destacados,
+  .tarifas,
+  .galeria {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -803,6 +1538,12 @@ a {
   .dialogo-botones {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .resumen-acciones .estado,
+  .resumen-acciones .ayuda-boton {
+    flex-basis: 100%;
   }
 
   .dialogo-botones .boton-texto {
@@ -815,7 +1556,7 @@ a {
   }
 }
 
-/* 16. Pantallas grandes (desde 56rem = 896 px). */
+/* 23. Pantallas grandes (desde 56rem = 896 px). */
 @media (min-width: 56rem) {
   .contenedor {
     padding-inline: 2rem;
@@ -835,22 +1576,24 @@ a {
     gap: 3rem;
   }
 
-  .foto-portada {
-    aspect-ratio: 4 / 3;
+  /* Portada: 4:3 en el móvil y 16:9 en el escritorio. */
+  .foto-portada .foto-marco {
+    aspect-ratio: 16 / 9;
   }
 
-  .datos {
+  .datos,
+  .grupos-beneficios,
+  .galeria {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .servicios {
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
+  .fechas {
+    grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
+    align-items: start;
+    gap: 1.25rem;
   }
 
-  .reserva {
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-    align-items: start;
-    gap: 2rem;
+  .resumen {
+    padding: 1.5rem 2rem;
   }
 }

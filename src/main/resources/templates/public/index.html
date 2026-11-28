@@ -3,31 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Imprescindible para que la página se vea bien en móviles -->
-  <meta name="color-scheme" content="light">
   <meta name="description" content="Casita de Tercera: casa de alquiler en Costamar, La Habana, para un único grupo de hasta 6 personas.">
   <title>Casita de Tercera · Costamar, La Habana</title>
-  <link rel="stylesheet" th:href="@{/css/app.css}">
-  <script th:src="@{/js/app.js}" defer></script>
+  <th:block th:replace="~{fragments/head :: recursos}"></th:block>
 </head>
 
 <body>
-  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  <th:block th:replace="~{fragments/header :: cabecera('inicio')}"></th:block>
 
-  <!-- Cabecera: en el móvil la marca se desplaza y solo queda fija la fila de navegación -->
-  <header class="cabecera">
-    <div class="contenedor cabecera-interior">
-      <a class="marca" href="#inicio">Casita de Tercera</a>
-      <nav class="navegacion" aria-label="Secciones de la página">
-        <ul>
-          <li><a href="#la-casa">La casa</a></li>
-          <li><a href="#reglas">Reglas</a></li>
-          <li><a href="#reservar">Reservar</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <main id="contenido">
+  <main id="contenido" tabindex="-1">
 
     <!-- Portada -->
     <section id="inicio" class="portada" aria-labelledby="titulo-portada">
@@ -38,22 +22,158 @@
           <p class="entradilla">Se alquila la casa completa a un único grupo de hasta 6 personas,
             con 2 o 3 habitaciones y estancias en bloques de 24 horas.</p>
           <div class="acciones">
-            <a class="boton boton-principal" href="#reservar">Consultar fechas</a>
-            <a class="boton boton-secundario" href="#la-casa">Conocer la casa</a>
+            <a class="boton boton-principal" th:href="@{/reserva}">Reservar</a>
+            <a class="boton boton-secundario" href="#beneficios">Conocer la casa</a>
           </div>
         </div>
-        <!-- TODO: foto de portada. Está en la primera pantalla, así que NO lleva loading="lazy":
-             <img th:src="@{/img/portada.jpg}" width="1200" height="900" alt="Descripción de la foto"> -->
-        <div class="foto-pendiente foto-portada" aria-hidden="true">Fotografía pendiente</div>
+
+        <!-- Foto de portada: está en la primera pantalla, así que NO lleva carga diferida.
+             Para activarla, descomente la etiqueta <img> y borre el marcador .foto-marcador. -->
+        <figure class="foto foto-portada">
+          <div class="foto-marco">
+            <!-- <img th:src="@{/img/casa/portada-1280.webp}"
+                 th:srcset="@{/img/casa/portada-640.webp} + ' 640w, ' + @{/img/casa/portada-1280.webp} + ' 1280w'"
+                 sizes="(min-width: 56rem) 45vw, 100vw"
+                 width="1280" height="960" fetchpriority="high" decoding="async"
+                 alt="Vista de la Casita de Tercera"> -->
+            <div class="foto-marcador" role="img" aria-label="Fotografía de la casa, pendiente">
+              <span aria-hidden="true">Fotografía pendiente</span>
+            </div>
+          </div>
+        </figure>
       </div>
     </section>
 
-    <!-- 1. La casa -->
+    <!-- 1. Beneficios: lo más destacado de la página, antes que el precio. -->
+    <section id="beneficios" class="seccion beneficios" aria-labelledby="titulo-beneficios">
+      <div class="contenedor">
+        <h2 id="titulo-beneficios">Lo que ofrece la casa</h2>
+        <p class="entradilla">Todo lo que sigue está incluido en el precio.</p>
+
+        <ul class="destacados">
+          <li class="destacado">
+            <span class="destacado-titulo">Casa completa</span>
+            <span class="destacado-texto">para un solo grupo</span>
+          </li>
+          <li class="destacado">
+            <span class="destacado-titulo">Hasta 6 personas</span>
+            <span class="destacado-texto">en 2 o 3 habitaciones</span>
+          </li>
+        </ul>
+
+        <div class="grupos-beneficios">
+          <section class="grupo-beneficios" aria-labelledby="titulo-confort">
+            <h3 id="titulo-confort">Confort</h3>
+            <ul class="lista-beneficios">
+              <li>Climatización</li>
+              <li>Agua caliente-Fría</li>
+              <li>Ropa de cama y toallas</li>
+              <li>Paneles solares</li>
+            </ul>
+          </section>
+          <section class="grupo-beneficios" aria-labelledby="titulo-exterior">
+            <h3 id="titulo-exterior">Exterior</h3>
+            <ul class="lista-beneficios">
+              <li>Piscina</li>
+              <li>Sombrillas</li>
+              <li>Tumbonas</li>
+              <li>Parqueo gratuito</li>
+            </ul>
+          </section>
+          <section class="grupo-beneficios" aria-labelledby="titulo-comodidades">
+            <h3 id="titulo-comodidades">Comodidades</h3>
+            <ul class="lista-beneficios">
+              <li>TV</li>
+              <li>Música</li>
+              <li>Minibar</li>
+              <li>Caja de seguridad</li>
+              <li>WiFi</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. La casa -->
     <section id="la-casa" class="seccion" aria-labelledby="titulo-casa">
       <div class="contenedor">
         <h2 id="titulo-casa">La casa</h2>
         <p class="entradilla">Se alquila la casa completa a un único grupo: 2 o 3 habitaciones, hasta 6 personas.
           Usted dispone de la casa por 24 horas, de 10:00 a 10:00.</p>
+
+        <dl class="datos">
+          <div class="dato">
+            <dt>Capacidad</dt>
+            <dd>Hasta 6 personas, en 2 o 3 habitaciones.</dd>
+          </div>
+          <div class="dato">
+            <dt>Horario</dt>
+            <dd>Entrada a las 10:00</dd>
+          </div>
+        </dl>
+
+        <!-- Fotos de la casa: fuera de la primera pantalla, todas con carga diferida.
+             Para activar cada una, descomente su <img> y borre el .foto-marcador que la acompaña.
+             Lista de archivos en static/img/casa/README.md -->
+        <div class="galeria">
+          <figure class="foto">
+            <div class="foto-marco">
+              <!-- <img th:src="@{/img/casa/sala.webp}" width="800" height="600" loading="lazy" decoding="async"
+                   alt="Sala de la casa"> -->
+              <div class="foto-marcador" role="img" aria-label="Fotografía de la sala, pendiente">
+                <span aria-hidden="true">Fotografía pendiente</span>
+              </div>
+            </div>
+            <figcaption>Sala</figcaption>
+          </figure>
+          <figure class="foto">
+            <div class="foto-marco">
+              <!-- <img th:src="@{/img/casa/habitacion-1.webp}" width="800" height="600" loading="lazy" decoding="async"
+                   alt="Habitación 1"> -->
+              <div class="foto-marcador" role="img" aria-label="Fotografía de la habitación 1, pendiente">
+                <span aria-hidden="true">Fotografía pendiente</span>
+              </div>
+            </div>
+            <figcaption>Habitación 1</figcaption>
+          </figure>
+          <figure class="foto">
+            <div class="foto-marco">
+              <!-- <img th:src="@{/img/casa/habitacion-2.webp}" width="800" height="600" loading="lazy" decoding="async"
+                   alt="Habitación 2"> -->
+              <div class="foto-marcador" role="img" aria-label="Fotografía de la habitación 2, pendiente">
+                <span aria-hidden="true">Fotografía pendiente</span>
+              </div>
+            </div>
+            <figcaption>Habitación 2</figcaption>
+          </figure>
+          <figure class="foto">
+            <div class="foto-marco">
+              <!-- <img th:src="@{/img/casa/habitacion-3.webp}" width="800" height="600" loading="lazy" decoding="async"
+                   alt="Habitación 3"> -->
+              <div class="foto-marcador" role="img" aria-label="Fotografía de la habitación 3, pendiente">
+                <span aria-hidden="true">Fotografía pendiente</span>
+              </div>
+            </div>
+            <figcaption>Habitación 3</figcaption>
+          </figure>
+          <figure class="foto">
+            <div class="foto-marco">
+              <!-- <img th:src="@{/img/casa/exterior.webp}" width="800" height="600" loading="lazy" decoding="async"
+                   alt="Exterior de la casa"> -->
+              <div class="foto-marcador" role="img" aria-label="Fotografía del exterior, pendiente">
+                <span aria-hidden="true">Fotografía pendiente</span>
+              </div>
+            </div>
+            <figcaption>Exterior</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Precios: después de los beneficios, claros y visibles. -->
+    <section id="precios" class="seccion" aria-labelledby="titulo-precios">
+      <div class="contenedor">
+        <h2 id="titulo-precios">Precios</h2>
 
         <div class="tarifas">
           <div class="tarifa">
@@ -70,190 +190,37 @@
 
         <dl class="datos">
           <div class="dato">
-            <dt>Capacidad</dt>
-            <dd>Hasta 6 personas, en 2 o 3 habitaciones.</dd>
-          </div>
-          <div class="dato">
-            <dt>Horario</dt>
-            <dd>Entrada a las 10:00 </dd>
-          </div>
-          <div class="dato">
             <dt>Pago</dt>
             <dd>Anticipo del 50 %, negociable. Pago en USD o EUR; en CUP de forma puntual, a la tasa de elTOQUE.</dd>
           </div>
         </dl>
 
-        <div class="servicios">
-          <div>
-            <h3>Incluido en el precio</h3>
-            <ul class="lista">
-              <li>Climatización</li>
-              <li>TV</li>
-              <li>Música</li>
-              <li>Minibar</li>
-              <li>Caja de seguridad</li>
-              <li>WiFi</li>
-              <li>Ropa de cama y toallas</li>
-              <li>Agua caliente</li>
-              <li>Piscina</li>
-              <li>Sombrillas</li>
-              <li>Tumbonas</li>
-              <li>Parqueo gratuito</li>
-              <li>Paneles solares</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Por un módico precio</h3>
-            <ul class="lista">
-              <li>Gastronomía</li>
-              <li>Transporte de 7 plazas con chofer</li>
-              
-            </ul>
-          </div>
+        <div class="aparte">
+          <h3>Por un módico precio</h3>
+          <p>Se cobran aparte; no están incluidos en el precio de la casa.</p>
+          <ul class="lista">
+            <li>Gastronomía</li>
+            <li>Transporte de 7 plazas con chofer</li>
+          </ul>
         </div>
-
-        <!-- TODO: fotos de la casa. Fuera de la primera pantalla, cada imagen con carga diferida:
-             <img th:src="@{/img/casa-1.jpg}" loading="lazy" decoding="async" width="1200" height="800" alt="Descripción de la foto"> -->
-        <div class="foto-pendiente foto-casa" aria-hidden="true">Fotografía pendiente</div>
       </div>
     </section>
 
-    <!-- 2. Reglas del local. El texto de las reglas vive SOLO aquí: el JS lo copia en el diálogo. -->
-    <section id="reglas" class="seccion" aria-labelledby="titulo-reglas">
+    <!-- 4. Llamada a reservar -->
+    <section id="reservar" class="seccion llamada" aria-labelledby="titulo-reservar">
       <div class="contenedor contenedor-estrecho">
-        <h2 id="titulo-reglas">Reglas del local</h2>
-        <p class="entradilla">Para reservar es necesario aceptar estas reglas.</p>
-        <div id="reglas-texto" class="reglas-texto">
-          <ol class="reglas">
-            <li>Quien reserva firma el reglamento.</li>
-            <li>Quien reserva responde por los daños y por el inventario.</li>
-            <li>Quien reserva debe cumplir las normas de conducta.</li>
-            <li>El anticipo se pierde, salvo por fuerza mayor o por falla de la casa.</li>
-          </ol>
-          <!-- TODO: reglamento completo -->
-          <p class="nota">El reglamento completo estará disponible próximamente.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. Reservar -->
-    <section id="reservar" class="seccion" aria-labelledby="titulo-reservar">
-      <div class="contenedor">
         <h2 id="titulo-reservar">Reservar</h2>
-        <p class="entradilla">Seleccione primero el día de entrada y después el de salida.
-          Cada reserva es de 24 horas va de 10:00 a.m a 10:00 a.m.</p>
-        <noscript>
-          <p class="aviso">Para elegir las fechas es necesario activar JavaScript en su navegador.</p>
-        </noscript>
-
-        <div class="reserva">
-          <div class="calendario">
-            <div class="calendario-cabecera">
-              <button type="button" class="calendario-mes" id="mes-anterior" aria-label="Mes anterior">
-                <span aria-hidden="true">&lsaquo;</span>
-              </button>
-              <h3 class="calendario-titulo" id="calendario-titulo" aria-live="polite">Calendario</h3>
-              <button type="button" class="calendario-mes" id="mes-siguiente" aria-label="Mes siguiente">
-                <span aria-hidden="true">&rsaquo;</span>
-              </button>
-            </div>
-
-            <table class="calendario-tabla" aria-labelledby="calendario-titulo">
-              <thead>
-                <tr>
-                  <th scope="col"><span aria-hidden="true">L</span><span class="solo-lectores">lunes</span></th>
-                  <th scope="col"><span aria-hidden="true">M</span><span class="solo-lectores">martes</span></th>
-                  <th scope="col"><span aria-hidden="true">X</span><span class="solo-lectores">miércoles</span></th>
-                  <th scope="col"><span aria-hidden="true">J</span><span class="solo-lectores">jueves</span></th>
-                  <th scope="col"><span aria-hidden="true">V</span><span class="solo-lectores">viernes</span></th>
-                  <th scope="col"><span aria-hidden="true">S</span><span class="solo-lectores">sábado</span></th>
-                  <th scope="col"><span aria-hidden="true">D</span><span class="solo-lectores">domingo</span></th>
-                </tr>
-              </thead>
-              <tbody id="calendario-dias"></tbody>
-            </table>
-
-            <ul class="leyenda" aria-hidden="true">
-              <li><span class="muestra muestra-extremo"></span>Entrada y salida</li>
-              <li><span class="muestra muestra-rango"></span>Estancia</li>
-              <li><span class="muestra muestra-hoy"></span>Hoy</li>
-            </ul>
-            <p class="calendario-ayuda">Con el teclado: flechas para cambiar de día; Re&nbsp;Pág y Av&nbsp;Pág para cambiar de mes.</p>
-          </div>
-
-          <div class="resumen">
-            <h3>Su selección</h3>
-            <dl class="resumen-datos">
-              <div>
-                <dt>Entrada</dt>
-                <dd id="resumen-entrada">Sin seleccionar</dd>
-              </div>
-              <div>
-                <dt>Salida</dt>
-                <dd id="resumen-salida">Sin seleccionar</dd>
-              </div>
-              <div>
-                <dt>Cantidad de Noches</dt>
-                <dd id="resumen-bloques" class="resumen-bloques">&mdash;</dd>
-              </div>
-            </dl>
-            <p class="estado" id="estado-reserva" role="status">Seleccione el día de entrada.</p>
-            <div class="resumen-acciones">
-              <button type="button" class="boton boton-principal" id="boton-reservar" disabled>Reservar</button>
-              <button type="button" class="boton boton-secundario" id="boton-borrar" disabled>Borrar fechas</button>
-            </div>
-          </div>
+        <p class="entradilla">En la página de reserva puede leer las reglas de la casa, elegir las fechas
+          y ver el precio de su estancia.</p>
+        <div class="acciones">
+          <a class="boton boton-principal" th:href="@{/reserva}">Reservar</a>
         </div>
       </div>
     </section>
 
   </main>
 
-  <footer class="pie">
-    <div class="contenedor pie-interior">
-      <div>
-        <p class="pie-marca">Casita de Tercera</p>
-        <p>Costamar, La Habana</p>
-        <p>Dirección:</p>
-        <p>Avenida 3era # 16224 / 162 y 162D Zona 1 Alamar Habana del Este.</p>
-        <p>Contacto:+53 54698462</p>
-      </div>
-      <a class="pie-enlace" href="#inicio">Volver al inicio</a>
-    </div>
-  </footer>
-
-  <!-- Diálogo de aceptación de reglas. Las reglas se copian aquí desde #reglas-texto. -->
-  <dialog id="dialogo-reglas" class="dialogo" aria-labelledby="dialogo-titulo">
-    <div class="dialogo-cabecera">
-      <h2 id="dialogo-titulo">Reglas del local</h2>
-    </div>
-    <div class="dialogo-cuerpo" tabindex="0" role="region" aria-label="Fechas y reglas" autofocus>
-      <dl class="dialogo-fechas">
-        <div>
-          <dt>Entrada</dt>
-          <dd id="dialogo-entrada"></dd>
-        </div>
-        <div>
-          <dt>Salida</dt>
-          <dd id="dialogo-salida"></dd>
-        </div>
-        <div>
-          <dt>Cantidad de Noches</dt>
-          <dd id="dialogo-bloques"></dd>
-        </div>
-      </dl>
-      <p>Lea las reglas antes de confirmar su solicitud:</p>
-      <div id="dialogo-reglas-texto"></div>
-    </div>
-    <div class="dialogo-pie">
-      <p class="dialogo-mensaje" id="dialogo-mensaje" role="status"></p>
-      <div class="dialogo-botones">
-        <button type="button" class="boton boton-secundario boton-aceptar" id="boton-aceptar" aria-pressed="false">Acepto las reglas</button>
-        <button type="button" class="boton boton-principal" id="boton-confirmar" disabled>Confirmar reserva</button>
-        <button type="button" class="boton boton-texto" id="boton-cancelar">Cancelar</button>
-      </div>
-    </div>
-  </dialog>
+  <th:block th:replace="~{fragments/footer :: pie}"></th:block>
 </body>
 
 </html>

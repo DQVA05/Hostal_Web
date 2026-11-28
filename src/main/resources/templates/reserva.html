@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reserva de la Casita de Tercera, en Costamar, La Habana: reglas, fechas y precio.">
+  <title>Reservar · Casita de Tercera</title>
+  <th:block th:replace="~{fragments/head :: recursos}"></th:block>
+  <script th:src="@{/js/reserva.js}" defer></script>
+</head>
+
+<body class="con-volver-arriba">
+  <th:block th:replace="~{fragments/header :: cabecera('reserva')}"></th:block>
+
+  <main id="contenido" class="pagina-reserva" tabindex="-1">
+    <div class="contenedor contenedor-reserva">
+      <h1 class="titulo-pagina">Reservar</h1>
+      <p class="entradilla">Seleccione primero el día de entrada y después el de salida.
+        Cada reserva es de 24 horas: va de 10:00 a. m. a 10:00 a. m.</p>
+
+      <!-- 1. Reglas: visibles antes del calendario. El texto vive en fragments/reglas.html. -->
+      <section id="reglas" class="bloque-reglas" aria-labelledby="titulo-reglas">
+        <h2 id="titulo-reglas">Reglas del local</h2>
+        <p>Para reservar es necesario aceptar estas reglas.</p>
+        <div th:replace="~{fragments/reglas :: reglas}"></div>
+      </section>
+
+      <noscript>
+        <p class="aviso">Para elegir las fechas y reservar es necesario activar JavaScript en su navegador.
+          Las reglas y los precios se pueden leer sin activarlo.</p>
+      </noscript>
+
+      <!-- El envío lo intercepta reserva.js: todavía no se manda ni se guarda ningún dato.
+           TODO backend: recibir este POST y repetir allí todas las validaciones. -->
+      <form id="formulario-reserva" class="formulario" method="post" th:action="@{/reserva}" novalidate>
+
+        <!-- 2. Fechas: calendario con la leyenda y la selección pegadas a él. -->
+        <fieldset class="grupo grupo-fechas">
+          <legend><h2>Fechas</h2></legend>
+          <p class="grupo-ayuda">La entrada más temprana es mañana. La salida debe ser posterior a la entrada.</p>
+
+          <div class="fechas">
+            <div class="calendario" id="calendario" aria-busy="true">
+              <div class="calendario-cabecera">
+                <button type="button" class="calendario-mes" id="mes-anterior" aria-label="Mes anterior" disabled>
+                  <span aria-hidden="true">&lsaquo;</span>
+                </button>
+                <h3 class="calendario-titulo" id="calendario-titulo" aria-live="polite">Calendario</h3>
+                <button type="button" class="calendario-mes" id="mes-siguiente" aria-label="Mes siguiente" disabled>
+                  <span aria-hidden="true">&rsaquo;</span>
+                </button>
+              </div>
+
+              <table class="calendario-tabla" aria-labelledby="calendario-titulo">
+                <thead>
+                  <tr>
+                    <th scope="col"><span aria-hidden="true">L</span><span class="solo-lectores">lunes</span></th>
+                    <th scope="col"><span aria-hidden="true">M</span><span class="solo-lectores">martes</span></th>
+                    <th scope="col"><span aria-hidden="true">X</span><span class="solo-lectores">miércoles</span></th>
+                    <th scope="col"><span aria-hidden="true">J</span><span class="solo-lectores">jueves</span></th>
+                    <th scope="col"><span aria-hidden="true">V</span><span class="solo-lectores">viernes</span></th>
+                    <th scope="col"><span aria-hidden="true">S</span><span class="solo-lectores">sábado</span></th>
+                    <th scope="col"><span aria-hidden="true">D</span><span class="solo-lectores">domingo</span></th>
+                  </tr>
+                </thead>
+                <!-- Esqueleto de carga: 6 semanas con el mismo alto que los días reales. reserva.js lo sustituye. -->
+                <tbody id="calendario-dias">
+                  <tr th:each="semana : ${#numbers.sequence(1, 6)}">
+                    <td th:each="dia : ${#numbers.sequence(1, 7)}"><span class="esqueleto esqueleto-dia"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <ul class="leyenda" aria-hidden="true">
+                <li><span class="muestra muestra-extremo"></span>Entrada y salida</li>
+                <li><span class="muestra muestra-rango"></span>Estancia</li>
+                <li><span class="muestra muestra-hoy"></span>Hoy (no disponible)</li>
+              </ul>
+              <p class="campo-error calendario-error" id="calendario-error" role="alert" hidden></p>
+              <p class="calendario-ayuda">Con el teclado: flechas para cambiar de día; Re&nbsp;Pág y Av&nbsp;Pág para cambiar de mes.</p>
+            </div>
+
+            <div class="seleccion">
+              <dl class="seleccion-datos">
+                <div>
+                  <dt>Entrada</dt>
+                  <dd id="seleccion-entrada">Sin seleccionar</dd>
+                </div>
+                <div>
+                  <dt>Salida</dt>
+                  <dd id="seleccion-salida">Sin seleccionar</dd>
+                </div>
+              </dl>
+              <p class="estado" id="estado-fechas" role="status">Seleccione el día de entrada.</p>
+              <button type="button" class="boton boton-secundario" id="boton-borrar" disabled>Borrar fechas</button>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 3. Datos del cliente. Etiqueta, ayuda, campo y error forman un bloque. -->
+        <fieldset class="grupo grupo-datos">
+          <legend><h2>Sus datos</h2></legend>
+          <p class="grupo-ayuda">Los tres campos son obligatorios.</p>
+
+          <div class="campos">
+            <div class="campo">
+              <label for="nombre">Nombre y apellidos</label>
+              <p class="campo-ayuda" id="nombre-ayuda">Entre 2 y 80 caracteres.</p>
+              <input type="text" id="nombre" name="nombre" autocomplete="name" required
+                     minlength="2" maxlength="80" aria-describedby="nombre-ayuda">
+              <p class="campo-error" id="nombre-error" hidden></p>
+            </div>
+
+            <div class="campo">
+              <label for="correo">Correo electrónico</label>
+              <p class="campo-ayuda" id="correo-ayuda">Por ejemplo: nombre@dominio.com</p>
+              <input type="email" id="correo" name="correo" autocomplete="email" required
+                     maxlength="254" spellcheck="false" aria-describedby="correo-ayuda">
+              <p class="campo-error" id="correo-error" hidden></p>
+            </div>
+
+            <div class="campo">
+              <label for="telefono">Teléfono</label>
+              <p class="campo-ayuda" id="telefono-ayuda">De 8 a 15 dígitos, con el prefijo + del país si lo desea.</p>
+              <input type="tel" id="telefono" name="telefono" autocomplete="tel" required
+                     aria-describedby="telefono-ayuda">
+              <p class="campo-error" id="telefono-error" hidden></p>
+            </div>
+
+            <!-- La casilla de ofertas va junto a su aviso de uso de datos. -->
+            <div class="consentimiento">
+              <p class="aviso-datos" id="aviso-datos">Sus datos se usarán para gestionar la reserva y, solo si lo autoriza, para enviarle ofertas.</p>
+              <label class="casilla" for="ofertas">
+                <input type="checkbox" id="ofertas" name="ofertas" value="si" aria-describedby="aviso-datos">
+                <span>Deseo recibir ofertas futuras</span>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- 4. Resumen y precio, junto al botón. -->
+        <section class="resumen" aria-labelledby="titulo-resumen">
+          <h2 id="titulo-resumen">Resumen</h2>
+          <dl class="resumen-datos">
+            <div>
+              <dt>Entrada</dt>
+              <dd id="resumen-entrada">Sin seleccionar</dd>
+            </div>
+            <div>
+              <dt>Salida</dt>
+              <dd id="resumen-salida">Sin seleccionar</dd>
+            </div>
+            <div>
+              <dt>Cantidad de noches</dt>
+              <dd id="resumen-noches" class="resumen-noches">&mdash;</dd>
+            </div>
+          </dl>
+
+          <!-- reserva.js calcula los totales con los precios de data-precio. -->
+          <table class="precios">
+            <caption>Precio</caption>
+            <thead>
+              <tr>
+                <th scope="col"><span class="solo-lectores">Opción</span></th>
+                <th scope="col">Por cada 24 h</th>
+                <th scope="col" id="precios-total">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-precio="100">
+                <th scope="row">2 habitaciones</th>
+                <td>100 USD</td>
+                <td class="precio-total">&mdash;</td>
+              </tr>
+              <tr data-precio="150">
+                <th scope="row">3 habitaciones</th>
+                <td>150 USD</td>
+                <td class="precio-total">&mdash;</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="precio-nota">Anticipo del 50 %, negociable. Pago en USD o EUR; en CUP de forma puntual, a la tasa de elTOQUE.</p>
+          <p class="precio-nota">Gastronomía y transporte de 7 plazas con chofer se cobran aparte.</p>
+
+          <div class="resumen-acciones">
+            <!-- Empieza deshabilitado: se habilita al elegir entrada y salida. -->
+            <button type="submit" class="boton boton-principal boton-reservar" id="boton-reservar" disabled
+                    aria-describedby="reservar-ayuda">Reservar</button>
+            <p class="ayuda-boton" id="reservar-ayuda">Para continuar, elija las fechas de entrada y salida.</p>
+            <p class="estado estado-formulario" id="estado-formulario" role="status"></p>
+          </div>
+        </section>
+      </form>
+    </div>
+  </main>
+
+  <th:block th:replace="~{fragments/footer :: pie}"></th:block>
+
+  <!-- Diálogo de aceptación: incluye el mismo fragmento de reglas que la página. -->
+  <dialog id="dialogo-reglas" class="dialogo" aria-labelledby="dialogo-titulo">
+    <div class="dialogo-cabecera">
+      <h2 id="dialogo-titulo">Reglas del local</h2>
+    </div>
+    <div class="dialogo-cuerpo" tabindex="0" role="region" aria-label="Fechas y reglas" autofocus>
+      <dl class="dialogo-fechas">
+        <div>
+          <dt>Entrada</dt>
+          <dd id="dialogo-entrada"></dd>
+        </div>
+        <div>
+          <dt>Salida</dt>
+          <dd id="dialogo-salida"></dd>
+        </div>
+        <div>
+          <dt>Cantidad de noches</dt>
+          <dd id="dialogo-noches"></dd>
+        </div>
+        <div>
+          <dt>Precio</dt>
+          <dd id="dialogo-precio"></dd>
+        </div>
+      </dl>
+      <p>Lea las reglas antes de confirmar su solicitud:</p>
+      <div th:replace="~{fragments/reglas :: reglas}"></div>
+    </div>
+    <div class="dialogo-pie">
+      <p class="dialogo-mensaje" id="dialogo-mensaje" role="status"></p>
+      <div class="dialogo-botones">
+        <button type="button" class="boton boton-secundario boton-aceptar" id="boton-aceptar" aria-pressed="false">Acepto las reglas</button>
+        <button type="button" class="boton boton-principal" id="boton-confirmar" disabled>Confirmar reserva</button>
+        <button type="button" class="boton boton-texto" id="boton-cancelar">Cancelar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Volver arriba: lo muestra reserva.js tras desplazar aproximadamente una pantalla. -->
+  <button type="button" class="volver-arriba" id="volver-arriba" aria-label="Volver arriba" hidden>
+    <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+      <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</body>
+
+</html>

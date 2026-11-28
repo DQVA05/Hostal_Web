@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <title>Dinero · Administración · Casita de Tercera</title>
+  <!-- Aplica el tema guardado antes de pintar (sin destello). Solo el tema usa localStorage. -->
+  <script>
+    (function () {
+      try {
+        var t = window.localStorage.getItem('tema');
+        if (t === 'claro' || t === 'oscuro') { document.documentElement.setAttribute('data-tema', t); }
+      } catch (e) { /* sin almacenamiento: se sigue el tema del sistema */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="admin.css">
+  <script src="datos-ejemplo.js" defer></script>
+  <script src="comun.js" defer></script>
+  <script src="dinero.js" defer></script>
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  <p class="banner-maqueta" role="note"><span class="icono i-info" aria-hidden="true"></span>Maqueta con datos ficticios. Nada se guarda</p>
+  <header class="cabecera">
+    <div class="marca">
+      <span class="marca-nombre">Casita de Tercera</span>
+      <span class="marca-sub">Administración</span>
+    </div>
+    <button type="button" class="boton-tema" data-boton-tema>
+      <span class="icono i-luna" aria-hidden="true"></span><span class="icono i-sol" aria-hidden="true"></span>
+      <span class="texto-a-oscuro">Modo oscuro</span><span class="texto-a-claro">Modo claro</span>
+    </button>
+  </header>
+  <nav class="nav" aria-label="Menú principal">
+    <ul class="nav-lista">
+      <li><a class="nav-enlace" href="inicio.html"><span class="icono i-casa" aria-hidden="true"></span><span class="nav-texto">Inicio</span></a></li>
+      <li><a class="nav-enlace" href="calendario.html"><span class="icono i-calendario" aria-hidden="true"></span><span class="nav-texto">Calendario</span></a></li>
+      <li><a class="nav-enlace" href="reservas.html"><span class="icono i-reservas" aria-hidden="true"></span><span class="nav-texto">Reservas</span></a></li>
+      <li><a class="nav-enlace" href="dinero.html" aria-current="page"><span class="icono i-dinero" aria-hidden="true"></span><span class="nav-texto">Dinero</span></a></li>
+      <li class="nav-mas">
+        <button type="button" class="nav-enlace nav-mas-boton" data-menu-mas aria-expanded="false" aria-controls="menu-mas"><span class="icono i-mas" aria-hidden="true"></span><span class="nav-texto">Más</span></button>
+        <ul class="menu-mas" id="menu-mas" hidden>
+          <li><a href="clientes.html"><span class="icono i-clientes" aria-hidden="true"></span>Clientes</a></li>
+          <li><a href="informe.html"><span class="icono i-informe" aria-hidden="true"></span>Informe</a></li>
+          <li><a class="enlace-salir" href="acceso.html"><span class="icono i-salir" aria-hidden="true"></span>Salir</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+    <main id="contenido" class="contenido" tabindex="-1">
+    <header class="pagina-cabecera">
+      <h1>Dinero</h1>
+      <p class="ayuda">Anote aquí lo que entra y lo que sale. Los pagos de las reservas se suman solos.</p>
+    </header>
+    <noscript><p class="nota nota-error">Este panel necesita JavaScript activado.</p></noscript>
+
+    <div data-listo>
+      <button type="button" class="boton boton-principal boton-grande" id="boton-nuevo">
+        <span class="icono i-sumar" aria-hidden="true"></span><span>Anotar movimiento</span>
+      </button>
+
+      <section class="seccion" aria-labelledby="filtros-titulo">
+        <h2 id="filtros-titulo">Qué quiere ver</h2>
+        <p class="ayuda">Elija el mes. Si quiere, elija también el tipo o la categoría.</p>
+        <div class="formulario">
+          <div class="campo">
+            <label for="filtro-mes">Mes</label>
+            <select id="filtro-mes"></select>
+          </div>
+          <div class="campo">
+            <label for="filtro-tipo">Tipo</label>
+            <select id="filtro-tipo">
+              <option value="">Todos los tipos</option>
+              <option value="ingreso">Ingresos</option>
+              <option value="propina">Propinas</option>
+              <option value="gasto">Gastos</option>
+              <option value="perdida">Pérdidas</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="filtro-categoria">Categoría</label>
+            <select id="filtro-categoria"></select>
+          </div>
+        </div>
+      </section>
+
+      <section class="seccion" aria-labelledby="resumen-titulo">
+        <h2 id="resumen-titulo">Resumen</h2>
+        <p class="ayuda">Todo pasado a dólares (USD) con la tasa de cambio de cada movimiento.</p>
+        <div class="tarjeta" id="resumen"></div>
+      </section>
+
+      <section class="seccion" aria-labelledby="lista-titulo">
+        <h2 id="lista-titulo">Movimientos</h2>
+        <p class="ayuda" id="lista-ayuda">Los más recientes primero.</p>
+        <div id="lista"></div>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="dialogo" id="dialogo-movimiento" aria-labelledby="movimiento-titulo">
+    <form id="form-movimiento" novalidate>
+      <div class="dialogo-cabecera">
+        <h2 id="movimiento-titulo">Anotar movimiento</h2>
+      </div>
+      <div class="dialogo-cuerpo formulario">
+        <fieldset id="mov-tipo-grupo" aria-describedby="mov-tipo-error">
+          <legend>¿Qué quiere anotar?</legend>
+          <div class="opciones">
+            <label class="opcion"><input type="radio" name="tipo" value="gasto"><span class="icono i-gasto" aria-hidden="true"></span><span>Gasto</span></label>
+            <label class="opcion"><input type="radio" name="tipo" value="ingreso"><span class="icono i-ingreso" aria-hidden="true"></span><span>Ingreso</span></label>
+            <label class="opcion"><input type="radio" name="tipo" value="propina"><span class="icono i-propina" aria-hidden="true"></span><span>Propina</span></label>
+            <label class="opcion"><input type="radio" name="tipo" value="perdida"><span class="icono i-alerta" aria-hidden="true"></span><span>Pérdida</span></label>
+          </div>
+          <p class="error-campo" id="mov-tipo-error"></p>
+        </fieldset>
+
+        <div class="campo">
+          <label for="mov-fecha">Fecha</label>
+          <input type="date" id="mov-fecha" required aria-describedby="mov-fecha-error">
+          <p class="error-campo" id="mov-fecha-error"></p>
+        </div>
+
+        <div class="campo" id="mov-categoria-campo">
+          <label for="mov-categoria">Categoría</label>
+          <select id="mov-categoria" aria-describedby="mov-categoria-ayuda mov-categoria-error"></select>
+          <p class="campo-ayuda" id="mov-categoria-ayuda"></p>
+          <p class="error-campo" id="mov-categoria-error"></p>
+        </div>
+
+        <div class="campo">
+          <label for="mov-monto">Cantidad</label>
+          <input type="text" id="mov-monto" inputmode="decimal" autocomplete="off" placeholder="Por ejemplo: 25,50" aria-describedby="mov-monto-error">
+          <p class="error-campo" id="mov-monto-error"></p>
+        </div>
+
+        <fieldset>
+          <legend>Moneda</legend>
+          <div class="opciones opciones-lista">
+            <label class="opcion"><input type="radio" name="moneda" value="USD"><span>USD (dólar)</span></label>
+            <label class="opcion"><input type="radio" name="moneda" value="EUR"><span>EUR (euro)</span></label>
+            <label class="opcion"><input type="radio" name="moneda" value="CUP"><span>CUP (peso)</span></label>
+          </div>
+        </fieldset>
+
+        <div class="campo" id="mov-tasa-campo" hidden>
+          <label for="mov-tasa" id="mov-tasa-etiqueta">Tasa de cambio</label>
+          <input type="text" id="mov-tasa" inputmode="decimal" autocomplete="off" aria-describedby="mov-tasa-ayuda mov-tasa-error">
+          <p class="campo-ayuda" id="mov-tasa-ayuda">Use la tasa de cambio vigente del día.</p>
+          <p class="error-campo" id="mov-tasa-error"></p>
+        </div>
+
+        <p class="equivalente" id="mov-equivalente" aria-live="polite"></p>
+
+        <div class="campo">
+          <label for="mov-reserva">Reserva <span class="opcional">(opcional)</span></label>
+          <select id="mov-reserva" aria-describedby="mov-reserva-ayuda"></select>
+          <p class="campo-ayuda" id="mov-reserva-ayuda">Si el movimiento es de un grupo alojado, elíjalo aquí.</p>
+        </div>
+
+        <div class="campo">
+          <label for="mov-nota">Nota <span class="opcional">(opcional)</span></label>
+          <input type="text" id="mov-nota" maxlength="140" autocomplete="off" placeholder="Por ejemplo: productos de limpieza">
+        </div>
+      </div>
+      <div class="dialogo-pie">
+        <button type="button" class="boton boton-secundario" id="mov-cancelar"><span class="icono i-cerrar" aria-hidden="true"></span><span>Cancelar</span></button>
+        <button type="submit" class="boton boton-principal" id="mov-guardar"><span class="icono i-check" aria-hidden="true"></span><span>Guardar</span></button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

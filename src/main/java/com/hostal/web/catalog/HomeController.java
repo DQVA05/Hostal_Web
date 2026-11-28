@@ -25,4 +25,10 @@ public class HomeController {
     public String reserva() {
         return "reserva";                    // templates/reserva.html
     }
+
+    // Página «Sobre nosotros»: solo muestra la plantilla.
+    @GetMapping("/sobre-nosotros")
+    public String sobreNosotros() {
+        return "sobre-nosotros";             // templates/sobre-nosotros.html
+    }
 }

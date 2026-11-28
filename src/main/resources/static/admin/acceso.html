@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <title>Entrar · Administración · Casita de Tercera</title>
+  <!-- Aplica el tema guardado antes de pintar (sin destello). Solo el tema usa localStorage. -->
+  <script>
+    (function () {
+      try {
+        var t = window.localStorage.getItem('tema');
+        if (t === 'claro' || t === 'oscuro') { document.documentElement.setAttribute('data-tema', t); }
+      } catch (e) { /* sin almacenamiento: se sigue el tema del sistema */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="admin.css">
+  <script src="comun.js" defer></script>
+  <script src="acceso.js" defer></script>
+</head>
+<body class="sin-nav">
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  <p class="banner-maqueta" role="note"><span class="icono i-info" aria-hidden="true"></span>Maqueta con datos ficticios. Nada se guarda</p>
+  <header class="cabecera">
+    <div class="marca">
+      <span class="marca-nombre">Casita de Tercera</span>
+      <span class="marca-sub">Administración</span>
+    </div>
+    <button type="button" class="boton-tema" data-boton-tema>
+      <span class="icono i-luna" aria-hidden="true"></span><span class="icono i-sol" aria-hidden="true"></span>
+      <span class="texto-a-oscuro">Modo oscuro</span><span class="texto-a-claro">Modo claro</span>
+    </button>
+  </header>
+
+  <main id="contenido" class="acceso" tabindex="-1">
+    <h1>Entrar</h1>
+    <p class="ayuda">Panel para llevar las reservas y el dinero de la casa.</p>
+    <p class="nota nota-aviso seccion" style="margin-top: 1rem">
+      <span class="icono i-alerta" aria-hidden="true"></span>
+      <span>Acceso de demostración, sin protección. Escriba cualquier usuario y contraseña.</span>
+    </p>
+    <noscript><p class="nota nota-error">Este panel necesita JavaScript activado.</p></noscript>
+
+    <form class="formulario seccion" id="form-acceso" novalidate style="margin-top: 1.5rem">
+      <div class="campo">
+        <label for="usuario">Usuario</label>
+        <input type="text" id="usuario" name="usuario" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="usuario-error">
+        <p class="error-campo" id="usuario-error"></p>
+      </div>
+      <div class="campo">
+        <label for="clave">Contraseña</label>
+        <div class="campo-con-boton">
+          <input type="password" id="clave" name="clave" autocomplete="current-password" aria-describedby="clave-error">
+          <button type="button" class="boton boton-secundario" id="ver-clave" aria-controls="clave" aria-pressed="false">
+            <span class="icono i-ojo" aria-hidden="true"></span><span>Mostrar</span>
+          </button>
+        </div>
+        <p class="error-campo" id="clave-error"></p>
+      </div>
+      <button type="submit" class="boton boton-principal boton-grande">
+        <span class="icono i-entrar" aria-hidden="true"></span><span>Entrar</span>
+      </button>
+    </form>
+  </main>
+</body>
+</html>

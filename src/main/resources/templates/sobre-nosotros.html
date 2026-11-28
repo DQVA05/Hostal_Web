@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sobre la Casita de Tercera, en Costamar, La Habana: la casa entera para un solo grupo de hasta 6 personas.">
+  <title>Sobre nosotros · Casita de Tercera</title>
+  <th:block th:replace="~{fragments/head :: recursos}"></th:block>
+</head>
+
+<body class="con-barra-reservar">
+  <th:block th:replace="~{fragments/header :: cabecera('sobre-nosotros')}"></th:block>
+
+  <main id="contenido" tabindex="-1">
+
+    <!-- Portada: una sola frase de propuesta de valor. -->
+    <section class="portada portada-sobre" aria-labelledby="titulo-sobre">
+      <div class="contenedor contenedor-estrecho">
+        <p class="antetitulo">Sobre nosotros</p>
+        <h1 id="titulo-sobre">La casa entera, solo para su grupo</h1>
+        <p class="entradilla">En Costamar, La Habana: hasta 6 personas, 2 o 3 habitaciones y la casa para ustedes de 10:00 a 10:00.</p>
+      </div>
+    </section>
+
+    <!-- La casa: lo incluido, con icono + texto (fragments/incluido.html, la misma lista que la portada). -->
+    <section class="seccion beneficios" aria-labelledby="titulo-casa-sobre">
+      <div class="contenedor">
+        <h2 id="titulo-casa-sobre">La casa</h2>
+        <p class="entradilla">Todo esto está incluido en el precio.</p>
+        <div th:replace="~{fragments/incluido :: incluido}"></div>
+      </div>
+    </section>
+
+    <!-- Nuestra historia: pendiente de que la escriban los dueños. No se inventa. -->
+    <section class="seccion" aria-labelledby="titulo-historia">
+      <div class="contenedor contenedor-estrecho">
+        <h2 id="titulo-historia">Nuestra historia</h2>
+        <p class="pendiente">[PENDIENTE: historia de la casa y de quienes la atienden]</p>
+      </div>
+    </section>
+
+    <!-- Cómo encontrarnos. Sin mapas incrustados ni scripts externos: solo un enlace. -->
+    <section class="seccion" aria-labelledby="titulo-llegar">
+      <div class="contenedor contenedor-estrecho">
+        <h2 id="titulo-llegar">Cómo encontrarnos</h2>
+        <dl class="datos datos-contacto">
+          <div class="dato">
+            <dt>Zona</dt>
+            <dd>Costamar, La Habana</dd>
+          </div>
+          <div class="dato">
+            <dt>Dirección</dt>
+            <dd th:insert="~{fragments/footer :: direccion}">Dirección</dd>
+          </div>
+          <div class="dato">
+            <dt>WhatsApp</dt>
+            <!-- TODO: cuando haya número, poner aquí un enlace https://wa.me/<número sin + ni espacios>. -->
+            <dd><span class="pendiente">[PENDIENTE: número de WhatsApp]</span></dd>
+          </div>
+          <div class="dato">
+            <dt>Teléfono</dt>
+            <dd><a href="tel:+5354698462">+53 54698462</a></dd>
+          </div>
+        </dl>
+        <div class="acciones">
+          <!-- TODO: confirmar la dirección y sustituir por el enlace exacto de la ubicación en el mapa. -->
+          <a class="boton boton-secundario" rel="noopener" target="_blank"
+             href="https://www.google.com/maps/search/?api=1&amp;query=Avenida%203era%2016224%2C%20Zona%201%2C%20Alamar%2C%20Habana%20del%20Este%2C%20Cuba">
+            Cómo llegar <span class="solo-lectores">(abre el mapa en otra pestaña)</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final cálido: llamada a la acción, no un pie desnudo. -->
+    <section class="seccion llamada" aria-labelledby="titulo-cierre" data-ocultar-barra>
+      <div class="contenedor contenedor-estrecho">
+        <h2 id="titulo-cierre">Le esperamos en Costamar</h2>
+        <p class="entradilla">Elija sus fechas y vea el precio de su estancia en un momento.</p>
+        <div class="acciones">
+          <a class="boton boton-principal boton-cta" th:href="@{/reserva}">
+            <span>Ver fechas libres</span>
+            <span class="boton-subtexto">La casa entera solo para su grupo</span>
+          </a>
+          <a class="boton boton-secundario" th:href="@{/#contacto}">Escríbanos una idea</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <th:block th:replace="~{fragments/footer :: pie}"></th:block>
+  <div th:replace="~{fragments/footer :: barra-reservar}"></div>
+</body>
+
+</html>

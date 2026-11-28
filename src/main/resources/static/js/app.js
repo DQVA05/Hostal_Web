@@ -1,6 +1,7 @@
 /* Casita de Tercera: código común a todas las páginas.
    - Botón de modo claro/oscuro (el tema inicial lo aplica el <head>, sin destello).
    - Esqueletos de carga de las fotos.
+   - Barra fija «Reservar» del móvil (portada y «Sobre nosotros»).
    JavaScript nativo, sin dependencias ni peticiones al servidor. */
 (function () {
   'use strict';
@@ -51,6 +52,37 @@
     img.remove();
     marco.appendChild(marcador);
     marcarCargada(marco);
+  }
+
+  /* ---------- Barra fija «Reservar» (móvil) ----------
+     Se oculta mientras se ve el pie o una llamada a la acción equivalente
+     ([data-ocultar-barra]) y mientras hay un campo enfocado (teclado abierto),
+     para no tapar nunca el contenido ni repetir la misma acción en pantalla. */
+  const barra = document.querySelector('[data-barra-reservar]');
+  if (barra) {
+    const visibles = new Set();
+    const actualizarBarra = function () {
+      const activo = document.activeElement;
+      const escribiendo = Boolean(activo && activo.matches && activo.matches('input, textarea, select'));
+      barra.classList.toggle('oculta', visibles.size > 0 || escribiendo);
+    };
+    if ('IntersectionObserver' in window) {
+      const observador = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (entrada) {
+          if (entrada.isIntersecting) {
+            visibles.add(entrada.target);
+          } else {
+            visibles.delete(entrada.target);
+          }
+        });
+        actualizarBarra();
+      });
+      document.querySelectorAll('.pie, [data-ocultar-barra]').forEach(function (nodo) {
+        observador.observe(nodo);
+      });
+    }
+    document.addEventListener('focusin', actualizarBarra);
+    document.addEventListener('focusout', function () { window.setTimeout(actualizarBarra, 0); });
   }
 
   document.querySelectorAll('.foto-marco img').forEach(function (img) {

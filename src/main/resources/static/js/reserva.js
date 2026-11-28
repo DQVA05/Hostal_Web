@@ -1,14 +1,12 @@
 /* Casita de Tercera: página de reserva.
-   Calendario, datos del cliente, resumen con precio, diálogo de aceptación de
-   reglas y botón "Volver arriba".
+   Calendario, datos del cliente, resumen con precio, diálogo de aceptación de las
+   regulaciones de la casa, pantalla de confirmación y botón "Volver arriba".
    NO envía ni guarda datos: nada va al servidor, a localStorage, a la consola ni a la URL.
    TODO backend: repetir todas las validaciones en el servidor, guardar los datos y
    el consentimiento de ofertas, y comprobar la disponibilidad de las fechas. */
 (function () {
   'use strict';
 
-  const MENSAJE_SIN_ENVIO = 'Su solicitud aún no se ha enviado. ' +
-    'La reserva en línea estará disponible próximamente.';
 
   /* ---------- Fechas ----------
      Cada día se representa con un número entero: días transcurridos desde el
@@ -121,7 +119,21 @@
     aceptar: $('boton-aceptar'),
     confirmar: $('boton-confirmar'),
     cancelar: $('boton-cancelar'),
-    volver: $('volver-arriba')
+    volver: $('volver-arriba'),
+    intro: document.querySelector('.contenedor-reserva > .entradilla'),
+    bloqueReglas: $('reglas'),
+    confirmacion: $('confirmacion'),
+    confirmacionTitulo: $('confirmacion-titulo'),
+    confirmacionNombre: $('confirmacion-nombre'),
+    confirmacionCorreo: $('confirmacion-correo'),
+    confirmacionTelefono: $('confirmacion-telefono'),
+    confirmacionEntrada: $('confirmacion-entrada'),
+    confirmacionSalida: $('confirmacion-salida'),
+    confirmacionNoches: $('confirmacion-noches'),
+    confirmacionPrecio: $('confirmacion-precio'),
+    confirmacionOfertas: $('confirmacion-ofertas'),
+    modificar: $('boton-modificar'),
+    ofertas: $('ofertas')
   };
 
   if (!el.dias || !el.formulario || !el.dialogo) {
@@ -327,7 +339,7 @@
         '. Seleccione el día de salida.');
     }
     estado.foco = dia;
-    anularAceptacion(); // cambiar las fechas anula la aceptación de las reglas
+    anularAceptacion(); // cambiar las fechas anula la aceptación de las regulaciones
     actualizarResumen();
     pintarCalendario(true);
   }
@@ -513,7 +525,7 @@
     return campos.filter(function (campo) { return !validarCampo(campo); });
   }
 
-  /* ---------- Envío y diálogo de reglas ---------- */
+  /* ---------- Envío y diálogo de las regulaciones de la casa ---------- */
   function anularAceptacion() {
     estado.aceptado = false;
     el.aceptar.setAttribute('aria-pressed', 'false');
@@ -585,7 +597,7 @@
   });
 
   el.confirmar.addEventListener('click', function () {
-    // Sin aceptar las reglas no se confirma nada.
+    // Sin aceptar las regulaciones de la casa no se confirma nada.
     if (!estado.aceptado) {
       return;
     }
@@ -601,9 +613,57 @@
       conError[0].input.focus();
       return;
     }
-    // TODO backend: aquí se enviaría la solicitud al servidor.
-    el.mensaje.textContent = MENSAJE_SIN_ENVIO;
+    // TODO backend: aquí se enviaría la solicitud al servidor y, si responde bien,
+    // se mostraría la confirmación (sin el aviso «todavía no se ha enviado»).
+    mostrarConfirmacion();
   });
+
+  /* ---------- Pantalla de confirmación (final de la reserva) ----------
+     Resumen claro, próximos pasos, contacto y agradecimiento. El formulario solo se
+     oculta: con «Cambiar fechas o datos» vuelve tal como estaba. */
+  function valorDe(id) {
+    const campo = $(id);
+    return campo ? campo.value.trim() : '';
+  }
+
+  function mostrarConfirmacion() {
+    if (!el.confirmacion) {
+      return;
+    }
+    const nombre = valorDe('nombre');
+    el.confirmacionTitulo.textContent = nombre ? '¡Gracias, ' + nombre + '!' : '¡Gracias!';
+    el.confirmacionNombre.textContent = nombre;
+    el.confirmacionCorreo.textContent = valorDe('correo');
+    el.confirmacionTelefono.textContent = valorDe('telefono');
+    el.confirmacionEntrada.textContent = textoFecha(estado.entrada) + ', 10:00';
+    el.confirmacionSalida.textContent = textoFecha(estado.salida) + ', 10:00';
+    el.confirmacionNoches.textContent = String(noches());
+    el.confirmacionPrecio.textContent = textoPrecioTotal() + ' (según las habitaciones que use)';
+    el.confirmacionOfertas.textContent = el.ofertas && el.ofertas.checked ? 'Sí, desea recibirlas' : 'No';
+
+    cerrarDialogo();
+    [el.intro, el.bloqueReglas, el.formulario].forEach(function (nodo) {
+      if (nodo) { nodo.hidden = true; }
+    });
+    el.confirmacion.hidden = false;
+    el.confirmacionTitulo.focus({ preventScroll: true });
+    const reducido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reducido ? 'auto' : 'smooth' });
+    actualizarVolverArriba();
+  }
+
+  function ocultarConfirmacion() {
+    el.confirmacion.hidden = true;
+    [el.intro, el.bloqueReglas, el.formulario].forEach(function (nodo) {
+      if (nodo) { nodo.hidden = false; }
+    });
+    enfocarDiaActivo();
+    actualizarVolverArriba();
+  }
+
+  if (el.modificar) {
+    el.modificar.addEventListener('click', ocultarConfirmacion);
+  }
 
   el.cancelar.addEventListener('click', cerrarDialogo);
 

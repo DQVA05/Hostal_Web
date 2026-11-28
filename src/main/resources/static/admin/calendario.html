@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <title>Calendario · Administración · Casita de Tercera</title>
+  <!-- Aplica el tema guardado antes de pintar (sin destello). Solo el tema usa localStorage. -->
+  <script>
+    (function () {
+      try {
+        var t = window.localStorage.getItem('tema');
+        if (t === 'claro' || t === 'oscuro') { document.documentElement.setAttribute('data-tema', t); }
+      } catch (e) { /* sin almacenamiento: se sigue el tema del sistema */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="admin.css">
+  <script src="datos-ejemplo.js" defer></script>
+  <script src="comun.js" defer></script>
+  <script src="calendario.js" defer></script>
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  <p class="banner-maqueta" role="note"><span class="icono i-info" aria-hidden="true"></span>Maqueta con datos ficticios. Nada se guarda</p>
+  <header class="cabecera">
+    <div class="marca">
+      <span class="marca-nombre">Casita de Tercera</span>
+      <span class="marca-sub">Administración</span>
+    </div>
+    <button type="button" class="boton-tema" data-boton-tema>
+      <span class="icono i-luna" aria-hidden="true"></span><span class="icono i-sol" aria-hidden="true"></span>
+      <span class="texto-a-oscuro">Modo oscuro</span><span class="texto-a-claro">Modo claro</span>
+    </button>
+  </header>
+  <nav class="nav" aria-label="Menú principal">
+    <ul class="nav-lista">
+      <li><a class="nav-enlace" href="inicio.html"><span class="icono i-casa" aria-hidden="true"></span><span class="nav-texto">Inicio</span></a></li>
+      <li><a class="nav-enlace" href="calendario.html" aria-current="page"><span class="icono i-calendario" aria-hidden="true"></span><span class="nav-texto">Calendario</span></a></li>
+      <li><a class="nav-enlace" href="reservas.html"><span class="icono i-reservas" aria-hidden="true"></span><span class="nav-texto">Reservas</span></a></li>
+      <li><a class="nav-enlace" href="dinero.html"><span class="icono i-dinero" aria-hidden="true"></span><span class="nav-texto">Dinero</span></a></li>
+      <li class="nav-mas">
+        <button type="button" class="nav-enlace nav-mas-boton" data-menu-mas aria-expanded="false" aria-controls="menu-mas"><span class="icono i-mas" aria-hidden="true"></span><span class="nav-texto">Más</span></button>
+        <ul class="menu-mas" id="menu-mas" hidden>
+          <li><a href="clientes.html"><span class="icono i-clientes" aria-hidden="true"></span>Clientes</a></li>
+          <li><a href="informe.html"><span class="icono i-informe" aria-hidden="true"></span>Informe</a></li>
+          <li><a class="enlace-salir" href="acceso.html"><span class="icono i-salir" aria-hidden="true"></span>Salir</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <main id="contenido" class="contenido" tabindex="-1">
+    <header class="pagina-cabecera">
+      <h1>Calendario</h1>
+      <p class="ayuda">Pulse un día para ver cómo está. Para cerrar o abrir días, pulse el primero y el último.</p>
+    </header>
+    <noscript><p class="nota nota-error">Este panel necesita JavaScript activado.</p></noscript>
+
+    <div data-listo>
+      <section class="calendario" aria-labelledby="calendario-titulo">
+        <div class="calendario-cabecera">
+          <button type="button" class="boton boton-secundario calendario-mes" id="mes-anterior">
+            <span class="icono i-anterior" aria-hidden="true"></span><span>Anterior</span>
+          </button>
+          <h2 class="calendario-titulo" id="calendario-titulo" aria-live="polite"></h2>
+          <button type="button" class="boton boton-secundario calendario-mes" id="mes-siguiente">
+            <span>Siguiente</span><span class="icono i-siguiente" aria-hidden="true"></span>
+          </button>
+        </div>
+        <table class="calendario-tabla" aria-labelledby="calendario-titulo">
+          <thead>
+            <tr>
+              <th scope="col"><abbr title="lunes">L</abbr></th>
+              <th scope="col"><abbr title="martes">M</abbr></th>
+              <th scope="col"><abbr title="miércoles">X</abbr></th>
+              <th scope="col"><abbr title="jueves">J</abbr></th>
+              <th scope="col"><abbr title="viernes">V</abbr></th>
+              <th scope="col"><abbr title="sábado">S</abbr></th>
+              <th scope="col"><abbr title="domingo">D</abbr></th>
+            </tr>
+          </thead>
+          <tbody id="calendario-dias"></tbody>
+        </table>
+        <ul class="leyenda" aria-label="Qué significa cada día">
+          <li><span class="muestra" aria-hidden="true"></span>Disponible</li>
+          <li><span class="muestra dia-pendiente" aria-hidden="true"><span class="icono i-reloj"></span></span>Pendiente</li>
+          <li><span class="muestra dia-reservado" aria-hidden="true"><span class="icono i-check"></span></span>Reservado</li>
+          <li><span class="muestra dia-desactivado" aria-hidden="true"><span class="icono i-candado"></span></span>Desactivado</li>
+          <li><span class="muestra dia-pasado" aria-hidden="true">3</span>Ya pasó (gris)</li>
+          <li><span class="muestra dia-hoy" aria-hidden="true">8</span>Hoy (subrayado)</li>
+          <li><span class="muestra dia-seleccion" aria-hidden="true"></span>Elegido (borde grueso)</li>
+        </ul>
+      </section>
+
+      <div class="nota calendario-panel" id="explicacion">
+        <span class="icono i-info" aria-hidden="true"></span>
+        <p><strong>Días que no se pueden desactivar:</strong> los que tienen una reserva (pendiente o reservada) y los que ya pasaron. Para liberar un día reservado, cancele antes la reserva en «Reservas».</p>
+      </div>
+
+      <section class="seccion" aria-labelledby="panel-titulo">
+        <h2 id="panel-titulo">Días elegidos</h2>
+        <p class="ayuda">Aquí verá lo que puede hacer con los días que elija.</p>
+        <div id="panel" aria-live="polite"></div>
+      </section>
+
+      <section class="seccion" aria-labelledby="contadores-titulo">
+        <h2 id="contadores-titulo">Resumen del mes</h2>
+        <p class="ayuda">Cuántos días hay de cada tipo en el mes que está viendo.</p>
+        <div class="cifras" id="contadores"></div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

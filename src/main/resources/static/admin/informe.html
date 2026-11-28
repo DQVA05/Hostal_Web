@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <title>Informe · Administración · Casita de Tercera</title>
+  <!-- Aplica el tema guardado antes de pintar (sin destello). Solo el tema usa localStorage. -->
+  <script>
+    (function () {
+      try {
+        var t = window.localStorage.getItem('tema');
+        if (t === 'claro' || t === 'oscuro') { document.documentElement.setAttribute('data-tema', t); }
+      } catch (e) { /* sin almacenamiento: se sigue el tema del sistema */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="admin.css">
+  <script src="datos-ejemplo.js" defer></script>
+  <script src="comun.js" defer></script>
+  <script src="informe.js" defer></script>
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  <p class="banner-maqueta" role="note"><span class="icono i-info" aria-hidden="true"></span>Maqueta con datos ficticios. Nada se guarda</p>
+  <header class="cabecera">
+    <div class="marca">
+      <span class="marca-nombre">Casita de Tercera</span>
+      <span class="marca-sub">Administración</span>
+    </div>
+    <button type="button" class="boton-tema" data-boton-tema>
+      <span class="icono i-luna" aria-hidden="true"></span><span class="icono i-sol" aria-hidden="true"></span>
+      <span class="texto-a-oscuro">Modo oscuro</span><span class="texto-a-claro">Modo claro</span>
+    </button>
+  </header>
+  <nav class="nav" aria-label="Menú principal">
+    <ul class="nav-lista">
+      <li><a class="nav-enlace" href="inicio.html"><span class="icono i-casa" aria-hidden="true"></span><span class="nav-texto">Inicio</span></a></li>
+      <li><a class="nav-enlace" href="calendario.html"><span class="icono i-calendario" aria-hidden="true"></span><span class="nav-texto">Calendario</span></a></li>
+      <li><a class="nav-enlace" href="reservas.html"><span class="icono i-reservas" aria-hidden="true"></span><span class="nav-texto">Reservas</span></a></li>
+      <li><a class="nav-enlace" href="dinero.html"><span class="icono i-dinero" aria-hidden="true"></span><span class="nav-texto">Dinero</span></a></li>
+      <li class="nav-mas">
+        <button type="button" class="nav-enlace nav-mas-boton" data-menu-mas aria-expanded="false" aria-controls="menu-mas"><span class="icono i-mas" aria-hidden="true"></span><span class="nav-texto">Más</span></button>
+        <ul class="menu-mas" id="menu-mas" hidden>
+          <li><a href="clientes.html"><span class="icono i-clientes" aria-hidden="true"></span>Clientes</a></li>
+          <li><a href="informe.html" aria-current="page"><span class="icono i-informe" aria-hidden="true"></span>Informe</a></li>
+          <li><a class="enlace-salir" href="acceso.html"><span class="icono i-salir" aria-hidden="true"></span>Salir</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+    <main id="contenido" class="contenido" tabindex="-1">
+    <header class="pagina-cabecera no-imprimir">
+      <h1>Informe</h1>
+      <p class="ayuda">Cómo va el negocio: dinero, ocupación y visitas a la web.</p>
+    </header>
+    <noscript><p class="nota nota-error">Este panel necesita JavaScript activado.</p></noscript>
+
+    <div data-listo>
+      <div class="solo-impresion cabecera-impresion">
+        <h1>Casita de Tercera</h1>
+        <p id="impresion-periodo"></p>
+        <p class="texto-suave" id="impresion-fecha"></p>
+      </div>
+
+      <section class="seccion no-imprimir" aria-labelledby="periodo-titulo">
+        <h2 id="periodo-titulo">Periodo</h2>
+        <p class="ayuda">Elija si quiere ver un mes o un año entero.</p>
+        <div class="formulario">
+          <fieldset>
+            <legend>Ver</legend>
+            <div class="opciones">
+              <label class="opcion"><input type="radio" name="periodo" value="mes" checked><span>Un mes</span></label>
+              <label class="opcion"><input type="radio" name="periodo" value="anio"><span>Un año</span></label>
+            </div>
+          </fieldset>
+          <div class="campo" id="campo-mes">
+            <label for="elegir-mes">Mes</label>
+            <select id="elegir-mes"></select>
+          </div>
+          <div class="campo" id="campo-anio" hidden>
+            <label for="elegir-anio">Año</label>
+            <select id="elegir-anio"></select>
+          </div>
+        </div>
+      </section>
+
+      <section class="seccion no-imprimir" aria-labelledby="exportar-titulo">
+        <h2 id="exportar-titulo">Guardar el informe</h2>
+        <p class="ayuda">Guárdelo en PDF para enviarlo, o descargue los movimientos para una hoja de cálculo.</p>
+        <div class="botones-columna">
+          <button type="button" class="boton boton-principal boton-grande" id="exportar-pdf" aria-describedby="pdf-ayuda">
+            <span class="icono i-imprimir" aria-hidden="true"></span><span>Exportar PDF</span>
+          </button>
+          <p class="campo-ayuda" id="pdf-ayuda">Se abrirá la ventana de imprimir: elija «Guardar como PDF».</p>
+          <button type="button" class="boton boton-secundario" id="descargar-csv">
+            <span class="icono i-descargar" aria-hidden="true"></span><span>Descargar CSV de los movimientos</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="seccion" aria-labelledby="cifras-titulo">
+        <h2 id="cifras-titulo">Cifras</h2>
+        <p class="ayuda">Lo más importante del periodo, en dólares (USD).</p>
+        <div class="cifras" id="cifras"></div>
+      </section>
+
+      <section class="seccion" aria-labelledby="meses-titulo">
+        <h2 id="meses-titulo">Lo que entró y lo que salió, mes a mes</h2>
+        <p class="ayuda" id="meses-ayuda">Barra lisa: lo que entró. Barra rayada: gastos y pérdidas.</p>
+        <div id="grafico-meses"></div>
+      </section>
+
+      <section class="seccion" aria-labelledby="linea-titulo">
+        <h2 id="linea-titulo">Ganancia de cada día</h2>
+        <p class="ayuda" id="linea-ayuda">Lo que entró menos lo que salió cada día. La línea de puntos es el cero.</p>
+        <div id="grafico-linea"></div>
+      </section>
+
+      <section class="seccion" aria-labelledby="fuentes-titulo">
+        <h2 id="fuentes-titulo">De dónde viene el dinero</h2>
+        <p class="ayuda">Lo que entró en el periodo, según su origen.</p>
+        <div id="grafico-fuentes"></div>
+      </section>
+
+      <section class="seccion" aria-labelledby="mejores-titulo">
+        <h2 id="mejores-titulo">Los tres mejores meses</h2>
+        <p class="ayuda" id="mejores-ayuda">Los meses con más ganancia neta.</p>
+        <div id="mejores"></div>
+      </section>
+
+      <section class="seccion" aria-labelledby="visitas-titulo">
+        <h2 id="visitas-titulo">Visitas a la página web</h2>
+        <p class="ayuda">Cuánta gente miró la web pública. Se cuenta de forma anónima.</p>
+        <div id="visitas"></div>
+      </section>
+
+      <div class="seccion" id="cierre"></div>
+    </div>
+  </main>
+</body>
+</html>

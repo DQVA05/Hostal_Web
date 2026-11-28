@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Reserva de la Casita de Tercera, en Costamar, La Habana: reglas, fechas y precio.">
+  <meta name="description" content="Reserva de la Casita de Tercera, en Costamar, La Habana: regulaciones de la casa, fechas y precio.">
   <title>Reservar · Casita de Tercera</title>
   <th:block th:replace="~{fragments/head :: recursos}"></th:block>
   <script th:src="@{/js/reserva.js}" defer></script>
@@ -18,16 +18,16 @@
       <p class="entradilla">Seleccione primero el día de entrada y después el de salida.
         Cada reserva es de 24 horas: va de 10:00 a. m. a 10:00 a. m.</p>
 
-      <!-- 1. Reglas: visibles antes del calendario. El texto vive en fragments/reglas.html. -->
+      <!-- 1. Regulaciones de la casa: visibles antes del calendario. El texto vive en fragments/reglas.html. -->
       <section id="reglas" class="bloque-reglas" aria-labelledby="titulo-reglas">
-        <h2 id="titulo-reglas">Reglas del local</h2>
-        <p>Para reservar es necesario aceptar estas reglas.</p>
+        <h2 id="titulo-reglas">Regulaciones de la casa para el servicio</h2>
+        <p>Para reservar es necesario aceptar las regulaciones de la casa.</p>
         <div th:replace="~{fragments/reglas :: reglas}"></div>
       </section>
 
       <noscript>
         <p class="aviso">Para elegir las fechas y reservar es necesario activar JavaScript en su navegador.
-          Las reglas y los precios se pueden leer sin activarlo.</p>
+          Las regulaciones de la casa y los precios se pueden leer sin activarlo.</p>
       </noscript>
 
       <!-- El envío lo intercepta reserva.js: todavía no se manda ni se guarda ningún dato.
@@ -179,29 +179,74 @@
               </tr>
             </tbody>
           </table>
-          <p class="precio-nota">Anticipo del 50 %, negociable. Pago en USD o EUR; en CUP de forma puntual, a la tasa de elTOQUE.</p>
+          <p class="precio-nota">Anticipo del 50 %, negociable. Pago en USD o EUR; en CUP de forma puntual, a la tasa de cambio vigente.</p>
           <p class="precio-nota">Gastronomía y transporte de 7 plazas con chofer se cobran aparte.</p>
 
           <div class="resumen-acciones">
             <!-- Empieza deshabilitado: se habilita al elegir entrada y salida. -->
-            <button type="submit" class="boton boton-principal boton-reservar" id="boton-reservar" disabled
-                    aria-describedby="reservar-ayuda">Reservar</button>
+            <button type="submit" class="boton boton-principal boton-reservar boton-cta" id="boton-reservar" disabled
+                    aria-describedby="reservar-ayuda">
+              <span>Reservar</span>
+              <span class="boton-subtexto">La casa entera solo para su grupo</span>
+            </button>
             <p class="ayuda-boton" id="reservar-ayuda">Para continuar, elija las fechas de entrada y salida.</p>
             <p class="estado estado-formulario" id="estado-formulario" role="status"></p>
           </div>
         </section>
       </form>
+
+      <!-- 5. Confirmación: el final de la reserva (ley del pico y el final). La muestra reserva.js
+           al confirmar en el diálogo. Resumen claro, próximos pasos, contacto y agradecimiento.
+           TODO backend: cuando la solicitud se envíe de verdad, quitar el aviso «sin envío». -->
+      <section id="confirmacion" class="confirmacion" aria-labelledby="confirmacion-titulo" hidden>
+        <p class="antetitulo">Solicitud preparada</p>
+        <h2 id="confirmacion-titulo" tabindex="-1">¡Gracias!</h2>
+        <p class="entradilla">Este es el resumen de su solicitud. Guárdelo o haga una captura de pantalla.</p>
+        <p class="aviso aviso-sin-envio">La reserva en línea estará disponible próximamente: esta solicitud todavía no se ha enviado.
+          Para reservar ya, llámenos o escríbanos (datos de contacto más abajo).</p>
+
+        <h3>Resumen</h3>
+        <dl class="resumen-datos confirmacion-datos">
+          <div><dt>A nombre de</dt><dd id="confirmacion-nombre"></dd></div>
+          <div><dt>Correo electrónico</dt><dd id="confirmacion-correo"></dd></div>
+          <div><dt>Teléfono</dt><dd id="confirmacion-telefono"></dd></div>
+          <div><dt>Entrada</dt><dd id="confirmacion-entrada"></dd></div>
+          <div><dt>Salida</dt><dd id="confirmacion-salida"></dd></div>
+          <div><dt>Cantidad de noches</dt><dd id="confirmacion-noches"></dd></div>
+          <div><dt>Precio</dt><dd id="confirmacion-precio"></dd></div>
+          <div><dt>Ofertas futuras</dt><dd id="confirmacion-ofertas"></dd></div>
+        </dl>
+
+        <h3>Próximos pasos</h3>
+        <ol class="pasos">
+          <li>Revisamos que sus fechas estén libres y le contestamos. <span class="pendiente">[PENDIENTE: plazo de respuesta]</span></li>
+          <li>Acordamos el anticipo del 50 % (negociable). Pago en USD o EUR; en CUP de forma puntual, a la tasa de cambio vigente.</li>
+          <li>El día de entrada, la casa es suya desde las 10:00 hasta las 10:00 del día de salida.</li>
+        </ol>
+
+        <h3>¿Tiene dudas? Hable con nosotros</h3>
+        <ul class="contacto-lista">
+          <li>WhatsApp: <span class="pendiente">[PENDIENTE: número de WhatsApp]</span></li>
+          <li>Teléfono: <a href="tel:+5354698462">+53 54698462</a></li>
+        </ul>
+
+        <p class="cierre">Gracias por elegir la Casita de Tercera. ¡Le esperamos en Costamar!</p>
+        <div class="acciones">
+          <a class="boton boton-secundario" th:href="@{/}">Volver al inicio</a>
+          <button type="button" class="boton boton-texto" id="boton-modificar">Cambiar fechas o datos</button>
+        </div>
+      </section>
     </div>
   </main>
 
   <th:block th:replace="~{fragments/footer :: pie}"></th:block>
 
-  <!-- Diálogo de aceptación: incluye el mismo fragmento de reglas que la página. -->
+  <!-- Diálogo de aceptación: incluye el mismo fragmento de las regulaciones que la página. -->
   <dialog id="dialogo-reglas" class="dialogo" aria-labelledby="dialogo-titulo">
     <div class="dialogo-cabecera">
-      <h2 id="dialogo-titulo">Reglas del local</h2>
+      <h2 id="dialogo-titulo">Regulaciones de la casa para el servicio</h2>
     </div>
-    <div class="dialogo-cuerpo" tabindex="0" role="region" aria-label="Fechas y reglas" autofocus>
+    <div class="dialogo-cuerpo" tabindex="0" role="region" aria-label="Fechas y regulaciones de la casa" autofocus>
       <dl class="dialogo-fechas">
         <div>
           <dt>Entrada</dt>
@@ -220,13 +265,13 @@
           <dd id="dialogo-precio"></dd>
         </div>
       </dl>
-      <p>Lea las reglas antes de confirmar su solicitud:</p>
+      <p>Lea las regulaciones de la casa antes de confirmar su solicitud:</p>
       <div th:replace="~{fragments/reglas :: reglas}"></div>
     </div>
     <div class="dialogo-pie">
       <p class="dialogo-mensaje" id="dialogo-mensaje" role="status"></p>
       <div class="dialogo-botones">
-        <button type="button" class="boton boton-secundario boton-aceptar" id="boton-aceptar" aria-pressed="false">Acepto las reglas</button>
+        <button type="button" class="boton boton-secundario boton-aceptar" id="boton-aceptar" aria-pressed="false">Acepto las regulaciones de la casa</button>
         <button type="button" class="boton boton-principal" id="boton-confirmar" disabled>Confirmar reserva</button>
         <button type="button" class="boton boton-texto" id="boton-cancelar">Cancelar</button>
       </div>

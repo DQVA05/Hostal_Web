@@ -6,9 +6,10 @@
   <meta name="description" content="Casita de Tercera: casa de alquiler en Costamar, La Habana, para un único grupo de hasta 6 personas.">
   <title>Casita de Tercera · Costamar, La Habana</title>
   <th:block th:replace="~{fragments/head :: recursos}"></th:block>
+  <script th:src="@{/js/contacto.js}" defer></script>
 </head>
 
-<body>
+<body class="con-barra-reservar">
   <th:block th:replace="~{fragments/header :: cabecera('inicio')}"></th:block>
 
   <main id="contenido" tabindex="-1">
@@ -21,8 +22,13 @@
           <h1 id="titulo-portada">Casita de Tercera</h1>
           <p class="entradilla">Se alquila la casa completa a un único grupo de hasta 6 personas,
             con 2 o 3 habitaciones y estancias en bloques de 24 horas.</p>
-          <div class="acciones">
-            <a class="boton boton-principal" th:href="@{/reserva}">Reservar</a>
+          <!-- Llamada principal: acción + beneficio real. data-ocultar-barra: mientras se ve,
+               la barra fija «Reservar» del móvil no aparece (no se repite la misma acción). -->
+          <div class="acciones" data-ocultar-barra>
+            <a class="boton boton-principal boton-cta" th:href="@{/reserva}">
+              <span>Ver fechas libres</span>
+              <span class="boton-subtexto">La casa entera solo para su grupo</span>
+            </a>
             <a class="boton boton-secundario" href="#beneficios">Conocer la casa</a>
           </div>
         </div>
@@ -61,35 +67,14 @@
           </li>
         </ul>
 
-        <div class="grupos-beneficios">
-          <section class="grupo-beneficios" aria-labelledby="titulo-confort">
-            <h3 id="titulo-confort">Confort</h3>
-            <ul class="lista-beneficios">
-              <li>Climatización</li>
-              <li>Agua caliente-Fría</li>
-              <li>Ropa de cama y toallas</li>
-              <li>Paneles solares</li>
-            </ul>
-          </section>
-          <section class="grupo-beneficios" aria-labelledby="titulo-exterior">
-            <h3 id="titulo-exterior">Exterior</h3>
-            <ul class="lista-beneficios">
-              <li>Piscina</li>
-              <li>Sombrillas</li>
-              <li>Tumbonas</li>
-              <li>Parqueo gratuito</li>
-            </ul>
-          </section>
-          <section class="grupo-beneficios" aria-labelledby="titulo-comodidades">
-            <h3 id="titulo-comodidades">Comodidades</h3>
-            <ul class="lista-beneficios">
-              <li>TV</li>
-              <li>Música</li>
-              <li>Minibar</li>
-              <li>Caja de seguridad</li>
-              <li>WiFi</li>
-            </ul>
-          </section>
+        <!-- Lista de lo incluido: fragments/incluido.html (la misma que en «Sobre nosotros»). -->
+        <div th:replace="~{fragments/incluido :: incluido}"></div>
+
+        <div class="acciones" data-ocultar-barra>
+          <a class="boton boton-principal boton-cta" th:href="@{/reserva}">
+            <span>Reservar ahora</span>
+            <span class="boton-subtexto">Parqueo y WiFi incluidos</span>
+          </a>
         </div>
       </div>
     </section>
@@ -191,7 +176,7 @@
         <dl class="datos">
           <div class="dato">
             <dt>Pago</dt>
-            <dd>Anticipo del 50 %, negociable. Pago en USD o EUR; en CUP de forma puntual, a la tasa de elTOQUE.</dd>
+            <dd>Anticipo del 50 %, negociable. Pago en USD o EUR; en CUP de forma puntual, a la tasa de cambio vigente.</dd>
           </div>
         </dl>
 
@@ -203,24 +188,91 @@
             <li>Transporte de 7 plazas con chofer</li>
           </ul>
         </div>
+
+        <div class="acciones" data-ocultar-barra>
+          <a class="boton boton-principal boton-cta" th:href="@{/reserva}">
+            <span>Elegir mis fechas</span>
+            <span class="boton-subtexto">Climatización y energía solar incluidas</span>
+          </a>
+        </div>
       </div>
     </section>
 
-    <!-- 4. Llamada a reservar -->
-    <section id="reservar" class="seccion llamada" aria-labelledby="titulo-reservar">
+    <!-- 4. Contacto: justo antes del pie. Sin backend todavía: validación en el navegador y
+         estado de éxito. TODO backend: recibir POST /api/contacto (ver contacto.js). -->
+    <section id="contacto" class="seccion contacto" aria-labelledby="titulo-contacto" data-ocultar-barra>
       <div class="contenedor contenedor-estrecho">
-        <h2 id="titulo-reservar">Reservar</h2>
-        <p class="entradilla">En la página de reserva puede leer las reglas de la casa, elegir las fechas
-          y ver el precio de su estancia.</p>
-        <div class="acciones">
-          <a class="boton boton-principal" th:href="@{/reserva}">Reservar</a>
+        <h2 id="titulo-contacto">¿Tiene una idea o sugerencia? Escríbanos</h2>
+        <p class="entradilla">Cuéntenos qué le gustaría encontrar en la casa o qué podemos mejorar.</p>
+
+        <form id="formulario-contacto" class="formulario-contacto" method="post" th:action="@{/api/contacto}" novalidate>
+          <div class="campos">
+            <div class="campo">
+              <label for="contacto-nombre">Nombre <span class="opcional">(opcional)</span></label>
+              <input type="text" id="contacto-nombre" name="nombre" autocomplete="name" maxlength="80">
+            </div>
+
+            <div class="campo">
+              <label for="contacto-correo">Correo electrónico</label>
+              <p class="campo-ayuda" id="contacto-correo-ayuda">Para poder responderle. Por ejemplo: nombre@dominio.com</p>
+              <input type="email" id="contacto-correo" name="correo" autocomplete="email" required
+                     maxlength="254" spellcheck="false" aria-describedby="contacto-correo-ayuda">
+              <p class="campo-error" id="contacto-correo-error" hidden></p>
+            </div>
+
+            <div class="campo">
+              <label for="contacto-mensaje">Mensaje</label>
+              <p class="campo-ayuda" id="contacto-mensaje-ayuda">Entre 10 y 1000 caracteres.</p>
+              <textarea id="contacto-mensaje" name="mensaje" rows="6" required minlength="10" maxlength="1000"
+                        aria-describedby="contacto-mensaje-ayuda contacto-contador"></textarea>
+              <p class="contador" id="contacto-contador">0 de 1000 caracteres</p>
+              <p class="solo-lectores" id="contacto-contador-anuncio" aria-live="polite"></p>
+              <p class="campo-error" id="contacto-mensaje-error" hidden></p>
+            </div>
+
+            <!-- Casilla de ofertas: aparte, sin marcar, junto a su aviso de uso de datos. -->
+            <div class="consentimiento">
+              <p class="aviso-datos" id="contacto-aviso-datos">Usaremos su correo para responderle y, solo si lo autoriza, para enviarle ofertas.</p>
+              <label class="casilla" for="contacto-ofertas">
+                <input type="checkbox" id="contacto-ofertas" name="ofertas" value="si" aria-describedby="contacto-aviso-datos">
+                <span>Deseo recibir ofertas futuras</span>
+              </label>
+            </div>
+
+            <!-- Campo trampa para robots: oculto a la vista, a los lectores de pantalla y al tabulador. -->
+            <div class="campo-trampa" aria-hidden="true">
+              <label for="contacto-web">No rellene este campo</label>
+              <input type="text" id="contacto-web" name="web" tabindex="-1" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="acciones">
+            <button type="submit" class="boton boton-principal boton-cta">
+              <span>Enviar mensaje</span>
+              <span class="boton-subtexto">Solo usaremos su correo para responderle</span>
+            </button>
+          </div>
+          <p class="estado estado-formulario" id="contacto-estado" role="status"></p>
+        </form>
+
+        <!-- Estado de éxito: lo muestra contacto.js. -->
+        <div class="exito" id="contacto-exito" hidden>
+          <h3 id="contacto-exito-titulo" tabindex="-1">¡Gracias por escribirnos!</h3>
+          <p id="contacto-exito-texto">Sus ideas nos ayudan a mejorar la casa.</p>
+          <!-- TODO backend: cuando exista POST /api/contacto, quitar este aviso. -->
+          <p class="aviso aviso-sin-envio">El envío en línea todavía no está activo, así que este mensaje aún no nos ha llegado.
+            Si es urgente, llámenos al <a href="tel:+5354698462">+53 54698462</a>.</p>
+          <button type="button" class="boton boton-secundario" id="contacto-otro">Escribir otro mensaje</button>
         </div>
+
+        <p class="cierre">Gracias por ayudarnos a mejorar. ¡Le esperamos en Costamar!</p>
       </div>
     </section>
 
   </main>
 
   <th:block th:replace="~{fragments/footer :: pie}"></th:block>
+  <div th:replace="~{fragments/footer :: barra-reservar}"></div>
 </body>
 
 </html>

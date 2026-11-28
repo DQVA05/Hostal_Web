@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <body>
-  <!-- Cabecera común. Parámetro «pagina»: 'inicio', 'reserva' o 'error' (marca el enlace activo).
+  <!-- Cabecera común. Parámetro «pagina»: 'inicio', 'reserva', 'sobre-nosotros' o 'error' (marca el enlace activo).
        En el móvil la marca se desplaza y solo queda fija la fila de navegación. -->
   <th:block th:fragment="cabecera(pagina)">
     <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -26,6 +26,7 @@
           <ul>
             <li><a th:href="@{/#la-casa}">La casa</a></li>
             <li><a th:href="@{/#precios}">Precios</a></li>
+            <li><a th:href="@{/sobre-nosotros}" th:aria-current="${pagina == 'sobre-nosotros'} ? 'page' : null">Sobre nosotros</a></li>
             <li><a th:href="@{/reserva}" th:aria-current="${pagina == 'reserva'} ? 'page' : null">Reservar</a></li>
           </ul>
         </nav>

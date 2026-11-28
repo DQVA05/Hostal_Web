@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <title>Reservas · Administración · Casita de Tercera</title>
+  <!-- Aplica el tema guardado antes de pintar (sin destello). Solo el tema usa localStorage. -->
+  <script>
+    (function () {
+      try {
+        var t = window.localStorage.getItem('tema');
+        if (t === 'claro' || t === 'oscuro') { document.documentElement.setAttribute('data-tema', t); }
+      } catch (e) { /* sin almacenamiento: se sigue el tema del sistema */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="admin.css">
+  <script src="datos-ejemplo.js" defer></script>
+  <script src="comun.js" defer></script>
+  <script src="reservas.js" defer></script>
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  <p class="banner-maqueta" role="note"><span class="icono i-info" aria-hidden="true"></span>Maqueta con datos ficticios. Nada se guarda</p>
+  <header class="cabecera">
+    <div class="marca">
+      <span class="marca-nombre">Casita de Tercera</span>
+      <span class="marca-sub">Administración</span>
+    </div>
+    <button type="button" class="boton-tema" data-boton-tema>
+      <span class="icono i-luna" aria-hidden="true"></span><span class="icono i-sol" aria-hidden="true"></span>
+      <span class="texto-a-oscuro">Modo oscuro</span><span class="texto-a-claro">Modo claro</span>
+    </button>
+  </header>
+  <nav class="nav" aria-label="Menú principal">
+    <ul class="nav-lista">
+      <li><a class="nav-enlace" href="inicio.html"><span class="icono i-casa" aria-hidden="true"></span><span class="nav-texto">Inicio</span></a></li>
+      <li><a class="nav-enlace" href="calendario.html"><span class="icono i-calendario" aria-hidden="true"></span><span class="nav-texto">Calendario</span></a></li>
+      <li><a class="nav-enlace" href="reservas.html" aria-current="page"><span class="icono i-reservas" aria-hidden="true"></span><span class="nav-texto">Reservas</span></a></li>
+      <li><a class="nav-enlace" href="dinero.html"><span class="icono i-dinero" aria-hidden="true"></span><span class="nav-texto">Dinero</span></a></li>
+      <li class="nav-mas">
+        <button type="button" class="nav-enlace nav-mas-boton" data-menu-mas aria-expanded="false" aria-controls="menu-mas"><span class="icono i-mas" aria-hidden="true"></span><span class="nav-texto">Más</span></button>
+        <ul class="menu-mas" id="menu-mas" hidden>
+          <li><a href="clientes.html"><span class="icono i-clientes" aria-hidden="true"></span>Clientes</a></li>
+          <li><a href="informe.html"><span class="icono i-informe" aria-hidden="true"></span>Informe</a></li>
+          <li><a class="enlace-salir" href="acceso.html"><span class="icono i-salir" aria-hidden="true"></span>Salir</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+    <main id="contenido" class="contenido" tabindex="-1">
+    <header class="pagina-cabecera">
+      <h1>Reservas</h1>
+      <p class="ayuda">Pulse una reserva para ver el detalle, anotar un pago o cambiar su estado.</p>
+    </header>
+    <noscript><p class="nota nota-error">Este panel necesita JavaScript activado.</p></noscript>
+
+    <div data-listo>
+      <button type="button" class="boton boton-principal boton-grande" id="boton-nueva">
+        <span class="icono i-sumar" aria-hidden="true"></span><span>Nueva reserva</span>
+      </button>
+      <p class="campo-ayuda" style="margin-top: 0.5rem">Para las reservas que le hagan por teléfono o por WhatsApp.</p>
+
+      <section class="seccion" aria-labelledby="filtros-titulo">
+        <h2 id="filtros-titulo">Mostrar</h2>
+        <p class="ayuda">Elija qué reservas quiere ver.</p>
+        <div class="filtros" id="filtros" role="group" aria-label="Estado de las reservas"></div>
+        <div id="lista" aria-live="polite"></div>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="dialogo" id="dialogo-detalle" aria-labelledby="detalle-titulo">
+    <div class="dialogo-cabecera">
+      <h2 id="detalle-titulo">Reserva</h2>
+      <button type="button" class="boton boton-secundario" id="detalle-cerrar"><span class="icono i-cerrar" aria-hidden="true"></span><span>Cerrar</span></button>
+    </div>
+    <div class="dialogo-cuerpo" id="detalle-cuerpo"></div>
+  </dialog>
+
+  <dialog class="dialogo" id="dialogo-nueva" aria-labelledby="nueva-titulo">
+    <form id="form-nueva" novalidate>
+      <div class="dialogo-cabecera">
+        <h2 id="nueva-titulo">Nueva reserva</h2>
+      </div>
+      <div class="dialogo-cuerpo formulario">
+        <fieldset>
+          <legend>Cliente</legend>
+          <div class="opciones">
+            <label class="opcion"><input type="radio" name="tipo-cliente" value="existente" checked><span>Ya es cliente</span></label>
+            <label class="opcion"><input type="radio" name="tipo-cliente" value="nuevo"><span>Cliente nuevo</span></label>
+          </div>
+        </fieldset>
+
+        <div class="campo" id="grupo-existente">
+          <label for="nueva-cliente">Elija el cliente</label>
+          <select id="nueva-cliente" aria-describedby="nueva-cliente-error"></select>
+          <p class="error-campo" id="nueva-cliente-error"></p>
+        </div>
+
+        <div class="formulario" id="grupo-nuevo" hidden>
+          <div class="campo">
+            <label for="nueva-nombre">Nombre</label>
+            <input type="text" id="nueva-nombre" autocomplete="off" maxlength="80" aria-describedby="nueva-nombre-error">
+            <p class="error-campo" id="nueva-nombre-error"></p>
+          </div>
+          <div class="campo">
+            <label for="nueva-telefono">Teléfono o WhatsApp</label>
+            <input type="tel" id="nueva-telefono" inputmode="tel" autocomplete="off" placeholder="+53 0000 0000" aria-describedby="nueva-telefono-error">
+            <p class="error-campo" id="nueva-telefono-error"></p>
+          </div>
+          <div class="campo">
+            <label for="nueva-email">Correo <span class="opcional">(opcional)</span></label>
+            <input type="email" id="nueva-email" autocomplete="off" aria-describedby="nueva-email-error">
+            <p class="error-campo" id="nueva-email-error"></p>
+          </div>
+          <label class="casilla"><input type="checkbox" id="nueva-ofertas"><span>Acepta recibir ofertas (pregúntele antes de marcarlo)</span></label>
+        </div>
+
+        <div class="campo">
+          <label for="nueva-entrada">Día de entrada (a las 10:00)</label>
+          <input type="date" id="nueva-entrada" aria-describedby="nueva-entrada-error">
+          <p class="error-campo" id="nueva-entrada-error"></p>
+        </div>
+        <div class="campo">
+          <label for="nueva-salida">Día de salida (a las 10:00)</label>
+          <input type="date" id="nueva-salida" aria-describedby="nueva-salida-error nueva-fechas-error">
+          <p class="error-campo" id="nueva-salida-error"></p>
+          <p class="error-campo" id="nueva-fechas-error"></p>
+        </div>
+
+        <fieldset>
+          <legend>Habitaciones</legend>
+          <div class="opciones opciones-lista" id="nueva-habitaciones"></div>
+        </fieldset>
+
+        <div class="campo">
+          <label for="nueva-huespedes">Huéspedes</label>
+          <select id="nueva-huespedes"></select>
+        </div>
+
+        <fieldset>
+          <legend>¿Por dónde reservó?</legend>
+          <div class="opciones">
+            <label class="opcion"><input type="radio" name="origen" value="telefono" checked><span class="icono i-telefono" aria-hidden="true"></span><span>Teléfono</span></label>
+            <label class="opcion"><input type="radio" name="origen" value="whatsapp"><span class="icono i-mensaje" aria-hidden="true"></span><span>WhatsApp</span></label>
+          </div>
+        </fieldset>
+
+        <div class="nota" id="nueva-precio" aria-live="polite"></div>
+
+        <fieldset>
+          <legend>Moneda en que pagará</legend>
+          <div class="opciones opciones-cortas">
+            <label class="opcion"><input type="radio" name="nueva-moneda" value="USD" checked><span>USD</span></label>
+            <label class="opcion"><input type="radio" name="nueva-moneda" value="EUR"><span>EUR</span></label>
+            <label class="opcion"><input type="radio" name="nueva-moneda" value="CUP"><span>CUP</span></label>
+          </div>
+        </fieldset>
+        <div class="campo" id="nueva-tasa-campo" hidden>
+          <label for="nueva-tasa" id="nueva-tasa-etiqueta">Tasa de cambio</label>
+          <input type="text" id="nueva-tasa" inputmode="decimal" autocomplete="off" aria-describedby="nueva-tasa-ayuda nueva-tasa-error">
+          <p class="campo-ayuda" id="nueva-tasa-ayuda">Use la tasa de cambio vigente.</p>
+          <p class="error-campo" id="nueva-tasa-error"></p>
+        </div>
+
+        <div class="campo">
+          <label for="nueva-deposito">Depósito acordado (USD)</label>
+          <input type="text" id="nueva-deposito" inputmode="decimal" autocomplete="off" aria-describedby="nueva-deposito-ayuda nueva-deposito-error">
+          <p class="campo-ayuda" id="nueva-deposito-ayuda">Normalmente la mitad del total. Puede cambiarlo si lo acordó con el cliente.</p>
+          <p class="error-campo" id="nueva-deposito-error"></p>
+        </div>
+
+        <fieldset>
+          <legend>¿Ya pagó el depósito?</legend>
+          <div class="opciones">
+            <label class="opcion"><input type="radio" name="pagado" value="no" checked><span>No, todavía</span></label>
+            <label class="opcion"><input type="radio" name="pagado" value="si"><span>Sí, ya lo pagó</span></label>
+          </div>
+          <p class="campo-ayuda" id="nueva-estado-ayuda"></p>
+        </fieldset>
+
+        <div class="campo">
+          <label for="nueva-nota">Nota <span class="opcional">(opcional)</span></label>
+          <input type="text" id="nueva-nota" maxlength="160" autocomplete="off">
+        </div>
+      </div>
+      <div class="dialogo-pie">
+        <button type="button" class="boton boton-secundario" id="nueva-cancelar"><span class="icono i-cerrar" aria-hidden="true"></span><span>Cancelar</span></button>
+        <button type="submit" class="boton boton-principal"><span class="icono i-check" aria-hidden="true"></span><span>Guardar reserva</span></button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="dialogo" id="dialogo-pago" aria-labelledby="pago-titulo">
+    <form id="form-pago" novalidate>
+      <div class="dialogo-cabecera">
+        <h2 id="pago-titulo">Anotar pago</h2>
+      </div>
+      <div class="dialogo-cuerpo formulario">
+        <p id="pago-resumen"></p>
+        <fieldset>
+          <legend>¿Qué pagó?</legend>
+          <div class="opciones opciones-lista">
+            <label class="opcion"><input type="radio" name="concepto" value="deposito"><span>Depósito</span></label>
+            <label class="opcion"><input type="radio" name="concepto" value="resto"><span>Resto del pago</span></label>
+            <label class="opcion"><input type="radio" name="concepto" value="pago"><span>Otro pago</span></label>
+          </div>
+        </fieldset>
+        <div class="campo">
+          <label for="pago-monto">Cantidad</label>
+          <input type="text" id="pago-monto" inputmode="decimal" autocomplete="off" aria-describedby="pago-monto-error">
+          <p class="error-campo" id="pago-monto-error"></p>
+        </div>
+        <fieldset>
+          <legend>Moneda</legend>
+          <div class="opciones opciones-cortas">
+            <label class="opcion"><input type="radio" name="pago-moneda" value="USD"><span>USD</span></label>
+            <label class="opcion"><input type="radio" name="pago-moneda" value="EUR"><span>EUR</span></label>
+            <label class="opcion"><input type="radio" name="pago-moneda" value="CUP"><span>CUP</span></label>
+          </div>
+        </fieldset>
+        <div class="campo" id="pago-tasa-campo" hidden>
+          <label for="pago-tasa" id="pago-tasa-etiqueta">Tasa de cambio</label>
+          <input type="text" id="pago-tasa" inputmode="decimal" autocomplete="off" aria-describedby="pago-tasa-error">
+          <p class="error-campo" id="pago-tasa-error"></p>
+        </div>
+        <p class="equivalente" id="pago-equivalente" aria-live="polite"></p>
+        <div class="campo">
+          <label for="pago-fecha">Fecha del pago</label>
+          <input type="date" id="pago-fecha" aria-describedby="pago-fecha-error">
+          <p class="error-campo" id="pago-fecha-error"></p>
+        </div>
+        <p class="campo-ayuda">Este cobro aparecerá en «Dinero» como alquiler.</p>
+      </div>
+      <div class="dialogo-pie">
+        <button type="button" class="boton boton-secundario" id="pago-cancelar"><span class="icono i-cerrar" aria-hidden="true"></span><span>Cancelar</span></button>
+        <button type="submit" class="boton boton-principal"><span class="icono i-check" aria-hidden="true"></span><span>Guardar pago</span></button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

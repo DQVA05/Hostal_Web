@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light dark">
+  <title>Clientes · Administración · Casita de Tercera</title>
+  <!-- Aplica el tema guardado antes de pintar (sin destello). Solo el tema usa localStorage. -->
+  <script>
+    (function () {
+      try {
+        var t = window.localStorage.getItem('tema');
+        if (t === 'claro' || t === 'oscuro') { document.documentElement.setAttribute('data-tema', t); }
+      } catch (e) { /* sin almacenamiento: se sigue el tema del sistema */ }
+    })();
+  </script>
+  <link rel="stylesheet" href="admin.css">
+  <script src="datos-ejemplo.js" defer></script>
+  <script src="comun.js" defer></script>
+  <script src="clientes.js" defer></script>
+</head>
+<body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
+  <p class="banner-maqueta" role="note"><span class="icono i-info" aria-hidden="true"></span>Maqueta con datos ficticios. Nada se guarda</p>
+  <header class="cabecera">
+    <div class="marca">
+      <span class="marca-nombre">Casita de Tercera</span>
+      <span class="marca-sub">Administración</span>
+    </div>
+    <button type="button" class="boton-tema" data-boton-tema>
+      <span class="icono i-luna" aria-hidden="true"></span><span class="icono i-sol" aria-hidden="true"></span>
+      <span class="texto-a-oscuro">Modo oscuro</span><span class="texto-a-claro">Modo claro</span>
+    </button>
+  </header>
+  <nav class="nav" aria-label="Menú principal">
+    <ul class="nav-lista">
+      <li><a class="nav-enlace" href="inicio.html"><span class="icono i-casa" aria-hidden="true"></span><span class="nav-texto">Inicio</span></a></li>
+      <li><a class="nav-enlace" href="calendario.html"><span class="icono i-calendario" aria-hidden="true"></span><span class="nav-texto">Calendario</span></a></li>
+      <li><a class="nav-enlace" href="reservas.html"><span class="icono i-reservas" aria-hidden="true"></span><span class="nav-texto">Reservas</span></a></li>
+      <li><a class="nav-enlace" href="dinero.html"><span class="icono i-dinero" aria-hidden="true"></span><span class="nav-texto">Dinero</span></a></li>
+      <li class="nav-mas">
+        <button type="button" class="nav-enlace nav-mas-boton" data-menu-mas aria-expanded="false" aria-controls="menu-mas"><span class="icono i-mas" aria-hidden="true"></span><span class="nav-texto">Más</span></button>
+        <ul class="menu-mas" id="menu-mas" hidden>
+          <li><a href="clientes.html" aria-current="page"><span class="icono i-clientes" aria-hidden="true"></span>Clientes</a></li>
+          <li><a href="informe.html"><span class="icono i-informe" aria-hidden="true"></span>Informe</a></li>
+          <li><a class="enlace-salir" href="acceso.html"><span class="icono i-salir" aria-hidden="true"></span>Salir</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+    <main id="contenido" class="contenido" tabindex="-1">
+    <header class="pagina-cabecera">
+      <h1>Clientes</h1>
+      <p class="ayuda">Busque a un cliente por su nombre, su correo o su teléfono.</p>
+    </header>
+    <noscript><p class="nota nota-error">Este panel necesita JavaScript activado.</p></noscript>
+
+    <div data-listo>
+      <form class="formulario" id="form-buscar" role="search">
+        <div class="campo">
+          <label for="buscar">Buscar cliente</label>
+          <input type="search" id="buscar" autocomplete="off" placeholder="Nombre, correo o teléfono" aria-describedby="buscar-ayuda">
+          <p class="campo-ayuda" id="buscar-ayuda">Los resultados cambian mientras escribe.</p>
+        </div>
+        <button type="submit" class="boton boton-principal boton-grande"><span class="icono i-buscar" aria-hidden="true"></span><span>Buscar</span></button>
+      </form>
+
+      <div id="avisos-duplicados"></div>
+
+      <section class="seccion" aria-labelledby="cuentas-titulo">
+        <h2 id="cuentas-titulo">En números</h2>
+        <p class="ayuda">Cuántas personas le han dejado sus datos.</p>
+        <div class="cifras" id="cuentas"></div>
+      </section>
+
+      <section class="seccion" aria-labelledby="lista-titulo">
+        <h2 id="lista-titulo">Fichas de clientes</h2>
+        <p class="ayuda" id="resultado" aria-live="polite"></p>
+        <div id="lista"></div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

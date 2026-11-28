@@ -18,7 +18,8 @@
   --texto: #1F2428;
   --principal: #14283A;
   --sobre-principal: #FFFFFF;
-  --acento: #7A5C2E;
+  --acento: #7A5C2E;               /* SOLO acciones principales: con texto blanco 6.2:1 */
+  --acento-hover: #5E4622;         /* con texto blanco 8.8:1 */
   --borde: #7C858D;                /* borde de controles */
   --error: #A12622;
 
@@ -41,16 +42,38 @@
   --pie-fondo: #14283A;
   --pie-texto: #C9D1D8;            /* 9.8:1 sobre el pie */
   --pie-titulo: #FFFFFF;
-  --pie-foco: #C9A86A;             /* 6.7:1 sobre el pie */
-  --foco: var(--acento);
+  --pie-foco: #A9C6DF;             /* 8.5:1 sobre el pie */
+  --foco: var(--principal);        /* anillo de foco: 13.9:1 sobre el fondo */
 
   --fuente-titulos: Georgia, "Times New Roman", serif;
   --fuente-texto: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
-  --radio: 3px;                    /* esquinas poco redondeadas */
-  --tactil: 2.75rem;               /* 44 px: tamaño mínimo de botones y enlaces */
-  --alto-marca: 2.75rem;           /* fila de la marca en la cabecera móvil */
+  --radio: 3px;                    /* esquinas poco redondeadas (el mismo radio en todo) */
+  --tactil: 3rem;                  /* 48 px: tamaño mínimo de botones y enlaces (ley de Fitts) */
+  --alto-marca: 3rem;              /* fila de la marca en la cabecera móvil */
   --alto-nav: 3rem;                /* fila de navegación que queda fija */
+
+  /* Escala única de espacios (rejilla de 4 px): 4 · 8 · 12 · 16 · 20 · 24 · 32 · 48 · 64 · 80 px */
+  --e-1: 0.25rem;
+  --e-2: 0.5rem;
+  --e-3: 0.75rem;
+  --e-4: 1rem;
+  --e-5: 1.25rem;
+  --e-6: 1.5rem;
+  --e-7: 2rem;
+  --e-8: 3rem;
+  --e-9: 4rem;
+  --e-10: 5rem;
+
+  /* Escala única de tipos: 16 · 18 · 20 · 24 · 32 px + títulos fluidos */
+  --t-1: 1rem;
+  --t-2: 1.125rem;
+  --t-3: 1.25rem;
+  --t-4: 1.5rem;
+  --t-5: 2rem;
+  --t-h2: clamp(1.75rem, 1.45rem + 1.4vw, 2.25rem);
+  --t-destacado: clamp(2rem, 1.55rem + 2vw, 2.75rem);
+  --t-h1: clamp(2.25rem, 1.6rem + 3vw, 3.5rem);
 }
 
 /* Tema oscuro: se aplica si el sistema lo pide y el visitante no eligió el claro,
@@ -63,6 +86,7 @@
     --principal: #A9C6DF;
     --sobre-principal: #11161B;
     --acento: #D3AE74;
+    --acento-hover: #E2C595;
     --borde: #6F7D89;
     --error: #F2A29D;
     --texto-suave: #AEB7BF;
@@ -83,7 +107,7 @@
     --pie-fondo: #0B1015;
     --pie-texto: #B4BDC5;
     --pie-titulo: #E8EAE6;
-    --pie-foco: #D3AE74;
+    --pie-foco: #A9C6DF;
   }
 }
 
@@ -95,6 +119,7 @@
   --principal: #A9C6DF;
   --sobre-principal: #11161B;
   --acento: #D3AE74;
+  --acento-hover: #E2C595;
   --borde: #6F7D89;
   --error: #F2A29D;
   --texto-suave: #AEB7BF;
@@ -115,7 +140,7 @@
   --pie-fondo: #0B1015;
   --pie-texto: #B4BDC5;
   --pie-titulo: #E8EAE6;
-  --pie-foco: #D3AE74;
+  --pie-foco: #A9C6DF;
 }
 
 :root[data-tema="claro"] {
@@ -153,7 +178,7 @@ html {
 
 body {
   font-family: var(--fuente-texto);
-  font-size: 1.0625rem;            /* 17 px: texto base por encima de 16 px */
+  font-size: var(--t-2);           /* 18 px: texto base */
   line-height: 1.6;
   color: var(--texto);
   background: var(--fondo);
@@ -192,17 +217,17 @@ h3 {
 }
 
 h1 {
-  font-size: clamp(2.25rem, 1.6rem + 3vw, 3.5rem);
+  font-size: var(--t-h1);
 }
 
 h2 {
-  font-size: clamp(1.75rem, 1.45rem + 1.4vw, 2.25rem);
-  margin-bottom: 1rem;
+  font-size: var(--t-h2);
+  margin-bottom: var(--e-4);
 }
 
 h3 {
-  font-size: 1.25rem;
-  margin-bottom: 0.75rem;
+  font-size: var(--t-3);
+  margin-bottom: var(--e-3);
 }
 
 a {
@@ -211,20 +236,20 @@ a {
 }
 
 a:active {
-  color: var(--acento);
+  color: var(--principal-hover);
 }
 
 .entradilla {
   max-width: 40rem;
   color: var(--texto-suave);
-  font-size: 1.125rem;
+  font-size: var(--t-2);
 }
 
 .antetitulo {
-  color: var(--acento);
+  color: var(--principal);
   font-weight: 600;
   letter-spacing: 0.04em;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--e-2);
 }
 
 .nota {
@@ -261,7 +286,7 @@ a:active {
   display: inline-flex;
   align-items: center;
   min-height: var(--tactil);
-  padding: 0 1rem;
+  padding: 0 var(--e-4);
   background: var(--principal);
   color: var(--sobre-principal);
   border-radius: var(--radio);
@@ -277,7 +302,7 @@ a:active {
   width: 100%;
   max-width: 68rem;
   margin-inline: auto;
-  padding-inline: 1rem;
+  padding-inline: var(--e-4);
 }
 
 .contenedor-estrecho {
@@ -285,14 +310,14 @@ a:active {
 }
 
 .seccion {
-  padding-block: 3.5rem;
+  padding-block: var(--e-8);
   border-top: 1px solid var(--borde-suave);
 }
 
 .aviso {
-  margin-top: 1.5rem;
-  padding: 1rem;
-  border: 1px solid var(--acento);
+  margin-top: var(--e-6);
+  padding: var(--e-4);
+  border: 1px solid var(--principal);
   border-left-width: 4px;
   border-radius: var(--radio);
   background: var(--superficie);
@@ -314,7 +339,7 @@ a:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: var(--e-2);
   height: var(--alto-marca);
 }
 
@@ -323,14 +348,14 @@ a:active {
   align-items: center;
   min-height: var(--tactil);
   font-family: var(--fuente-titulos);
-  font-size: 1.125rem;
+  font-size: var(--t-2);
   color: var(--principal);
   text-decoration: none;
 }
 
 .navegacion ul {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
   height: var(--alto-nav);
 }
@@ -340,9 +365,12 @@ a:active {
   align-items: center;
   justify-content: center;
   min-height: var(--tactil);
-  padding-inline: 0.5rem;
+  padding-inline: var(--e-1);
   color: var(--texto);
+  font-size: var(--t-1);
   font-weight: 500;
+  line-height: 1.15;
+  text-align: center;
   text-decoration: none;
   border-radius: var(--radio);
 }
@@ -351,22 +379,22 @@ a:active {
 .navegacion a[aria-current="page"] {
   color: var(--principal);
   font-weight: 700;
-  box-shadow: inset 0 -3px 0 var(--acento);
+  box-shadow: inset 0 -3px 0 var(--principal);
 }
 
 /* Botón de tema: solo existe con JavaScript (la clase .js la pone el <head>). */
 .boton-tema {
   display: none;
   align-items: center;
-  gap: 0.375rem;
+  gap: var(--e-2);
   min-height: var(--tactil);
   min-width: var(--tactil);
-  padding: 0 0.625rem;
+  padding: 0 var(--e-3);
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--radio);
   color: var(--texto);
-  font-size: 1rem;
+  font-size: var(--t-1);
   cursor: pointer;
 }
 
@@ -424,10 +452,10 @@ a:active {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--e-2);
   min-height: var(--tactil);
   min-width: var(--tactil);
-  padding: 0.625rem 1.25rem;
+  padding: var(--e-3) var(--e-5);
   border: 1px solid transparent;
   border-radius: var(--radio);
   font-weight: 600;
@@ -437,16 +465,17 @@ a:active {
   cursor: pointer;
 }
 
+/* Acción principal: el único elemento con el color de acento (AA en claro y oscuro). */
 .boton-principal {
-  background: var(--principal);
-  border-color: var(--principal);
-  color: var(--sobre-principal);
+  background: var(--acento);
+  border-color: var(--acento);
+  color: var(--sobre-acento);
 }
 
 .boton-principal:not(:disabled):active {
-  background: var(--principal-hover);
-  border-color: var(--principal-hover);
-  color: var(--sobre-principal);
+  background: var(--acento-hover);
+  border-color: var(--acento-hover);
+  color: var(--sobre-acento);
 }
 
 .boton-secundario {
@@ -468,7 +497,7 @@ a:active {
 }
 
 .boton-texto:active {
-  color: var(--acento);
+  color: var(--principal-hover);
 }
 
 .boton:disabled {
@@ -480,9 +509,9 @@ a:active {
 
 /* "Acepto las reglas" pulsado: color de acento y marca de verificación dibujada con CSS. */
 .boton-aceptar[aria-pressed="true"] {
-  background: var(--acento);
-  border-color: var(--acento);
-  color: var(--sobre-acento);
+  background: var(--principal);
+  border-color: var(--principal);
+  color: var(--sobre-principal);
 }
 
 .boton-aceptar[aria-pressed="true"]::before {
@@ -497,22 +526,22 @@ a:active {
 
 .acciones {
   display: grid;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
+  gap: var(--e-3);
+  margin-top: var(--e-7);
 }
 
 /* 8. Portada. */
 .portada {
-  padding-block: 2.5rem 3rem;
+  padding-block: var(--e-7) var(--e-8);
 }
 
 .portada-interior {
   display: grid;
-  gap: 2rem;
+  gap: var(--e-7);
 }
 
 .portada .entradilla {
-  margin-top: 1rem;
+  margin-top: var(--e-4);
 }
 
 /* 9. Fotos y esqueletos de carga.
@@ -543,14 +572,14 @@ a:active {
   inset: 0;
   display: grid;
   place-items: center;
-  padding: 1rem;
+  padding: var(--e-4);
   color: var(--texto-suave);
-  font-size: 1rem;
+  font-size: var(--t-1);
   text-align: center;
 }
 
 .foto figcaption {
-  margin-top: 0.5rem;
+  margin-top: var(--e-2);
   color: var(--texto-suave);
 }
 
@@ -585,87 +614,99 @@ a:active {
 }
 
 .beneficios h2 {
-  font-size: clamp(2rem, 1.55rem + 2vw, 2.75rem);
+  font-size: var(--t-destacado);
 }
 
 .destacados {
   display: grid;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: var(--e-4);
+  margin-top: var(--e-7);
 }
 
 .destacado {
   display: grid;
-  gap: 0.25rem;
-  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  gap: var(--e-1);
+  padding: var(--e-5) var(--e-5) var(--e-5) var(--e-6);
   background: var(--fondo);
-  border-left: 4px solid var(--acento);
+  border-left: 4px solid var(--principal);
   border-radius: var(--radio);
 }
 
 .destacado-titulo {
   font-family: var(--fuente-titulos);
-  font-size: clamp(1.75rem, 1.5rem + 1.2vw, 2.25rem);
+  font-size: var(--t-h2);
   line-height: 1.15;
   color: var(--principal);
 }
 
 .destacado-texto {
-  font-size: 1.125rem;
+  font-size: var(--t-2);
   color: var(--texto-suave);
 }
 
-.grupos-beneficios {
+/* Lo incluido en el precio: rejilla de icono + texto, agrupada (fragments/incluido.html). */
+.incluido {
   display: grid;
-  gap: 1.5rem;
-  margin-top: 2rem;
+  gap: var(--e-6);
+  margin-top: var(--e-7);
 }
 
-.grupo-beneficios {
-  padding: 1.25rem;
+.incluido-grupo {
+  padding: var(--e-5);
+  background: var(--superficie);
   border: 1px solid var(--borde-suave);
   border-top: 3px solid var(--principal);
   border-radius: var(--radio);
+  box-shadow: var(--sombra);
 }
 
-.grupo-beneficios h3 {
-  font-size: 1.5rem;
+.incluido-grupo h3 {
+  font-size: var(--t-4);
 }
 
-.lista-beneficios li {
-  position: relative;
-  padding: 0.5rem 0 0.5rem 2rem;
-  font-size: 1.125rem;
-  border-bottom: 1px solid var(--borde-suave);
+.incluido-lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--e-3) var(--e-5);
 }
 
-.lista-beneficios li:last-child {
-  border-bottom: 0;
+.incluido-lista li {
+  display: flex;
+  align-items: center;
+  gap: var(--e-3);
+  min-height: var(--tactil);
+  line-height: 1.3;
 }
 
-/* Marca de verificación dibujada con CSS. */
-.lista-beneficios li::before {
-  content: "";
-  position: absolute;
-  left: 0.375rem;
-  top: 0.8rem;
-  width: 0.45rem;
-  height: 0.85rem;
-  border: solid var(--acento);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
+.incluido-icono {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: var(--e-2);
+  background: var(--rango);
+  border-radius: var(--radio);
+  fill: none;
+  stroke: var(--principal);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.incluido-icono .relleno {
+  fill: var(--principal);
+  stroke: none;
 }
 
 /* 11. La casa. */
 .datos {
   display: grid;
-  gap: 1.25rem;
-  margin-top: 2rem;
+  gap: var(--e-5);
+  margin-top: var(--e-7);
 }
 
 .dato {
-  padding-left: 1rem;
-  border-left: 2px solid var(--acento);
+  padding-left: var(--e-4);
+  border-left: 2px solid var(--principal);
 }
 
 .dato dt {
@@ -675,18 +716,18 @@ a:active {
 
 .galeria {
   display: grid;
-  gap: 1.5rem;
-  margin-top: 2.5rem;
+  gap: var(--e-6);
+  margin-top: var(--e-7);
 }
 
 /* 12. Precios. */
 .tarifas {
   display: grid;
-  gap: 1rem;
+  gap: var(--e-4);
 }
 
 .tarifa {
-  padding: 1.25rem;
+  padding: var(--e-5);
   background: var(--superficie);
   border: 1px solid var(--borde-suave);
   border-radius: var(--radio);
@@ -695,7 +736,7 @@ a:active {
 
 .tarifa-nombre {
   font-family: var(--fuente-titulos);
-  font-size: 2rem;
+  font-size: var(--t-5);
   line-height: 1.2;
   color: var(--principal);
 }
@@ -706,21 +747,21 @@ a:active {
 
 .tarifa-nota {
   color: var(--texto-suave);
-  font-size: 1rem;
+  font-size: var(--t-1);
 }
 
 .aparte {
-  margin-top: 2.5rem;
+  margin-top: var(--e-7);
   max-width: 40rem;
 }
 
 .aparte > p {
   color: var(--texto-suave);
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--e-2);
 }
 
 .lista li {
-  padding-block: 0.5rem;
+  padding-block: var(--e-2);
   border-bottom: 1px solid var(--borde-suave);
 }
 
@@ -732,13 +773,13 @@ a:active {
 /* 14. Reglas: lista numerada con números grandes en serif. */
 .reglas {
   counter-reset: regla;
-  margin-top: 1rem;
+  margin-top: var(--e-4);
 }
 
 .reglas li {
   counter-increment: regla;
   position: relative;
-  padding: 0.875rem 0 0.875rem 2.75rem;
+  padding: var(--e-3) 0 var(--e-3) var(--e-8);
   border-bottom: 1px solid var(--borde-suave);
 }
 
@@ -748,17 +789,17 @@ a:active {
   left: 0;
   top: 0.75rem;
   font-family: var(--fuente-titulos);
-  font-size: 1.25rem;
-  color: var(--acento);
+  font-size: var(--t-3);
+  color: var(--principal);
 }
 
 .reglas-texto .nota {
-  margin-top: 1rem;
+  margin-top: var(--e-4);
 }
 
 /* 15. Página de reserva. */
 .pagina-reserva {
-  padding-block: 2rem 4rem;
+  padding-block: var(--e-7) var(--e-9);
 }
 
 .contenedor-reserva {
@@ -766,12 +807,12 @@ a:active {
 }
 
 .titulo-pagina {
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--e-3);
 }
 
 .bloque-reglas {
-  margin-top: 2rem;
-  padding: 1.25rem;
+  margin-top: var(--e-7);
+  padding: var(--e-5);
   background: var(--superficie);
   border: 1px solid var(--borde-suave);
   border-radius: var(--radio);
@@ -779,14 +820,14 @@ a:active {
 }
 
 .bloque-reglas h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--t-4);
+  margin-bottom: var(--e-2);
 }
 
 .formulario {
   display: grid;
-  gap: 3rem;
-  margin-top: 3rem;
+  gap: var(--e-8);
+  margin-top: var(--e-8);
 }
 
 /* Grupos con título (fieldset + legend). min-width: 0 evita que el fieldset
@@ -806,18 +847,18 @@ a:active {
 }
 
 .grupo legend h2 {
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--e-1);
 }
 
 .grupo-ayuda {
   color: var(--texto-suave);
-  margin-bottom: 1rem;
+  margin-bottom: var(--e-4);
 }
 
 /* Calendario, leyenda y selección van juntos (12 px entre ellos). */
 .fechas {
   display: grid;
-  gap: 0.75rem;
+  gap: var(--e-3);
 }
 
 .calendario,
@@ -837,7 +878,7 @@ html:not(.js) .seleccion {
 
 /* Padding lateral pequeño en el móvil para que cada día mida más de 40 px de ancho. */
 .calendario {
-  padding: 0.75rem 0.25rem;
+  padding: var(--e-3) var(--e-1);
 }
 
 .calendario.con-error {
@@ -848,16 +889,16 @@ html:not(.js) .seleccion {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  padding-inline: 0.25rem;
-  margin-bottom: 0.5rem;
+  gap: var(--e-2);
+  padding-inline: var(--e-1);
+  margin-bottom: var(--e-2);
 }
 
 .calendario-titulo {
   flex: 1;
   margin: 0;
   text-align: center;
-  font-size: 1.25rem;
+  font-size: var(--t-3);
 }
 
 .calendario-mes {
@@ -870,7 +911,7 @@ html:not(.js) .seleccion {
   border: 1px solid var(--borde);
   border-radius: var(--radio);
   color: var(--principal);
-  font-size: 1.75rem;
+  font-size: var(--t-4);
   line-height: 1;
   cursor: pointer;
 }
@@ -892,8 +933,8 @@ html:not(.js) .seleccion {
 }
 
 .calendario-tabla th {
-  padding-block: 0.25rem;
-  font-size: 1rem;
+  padding-block: var(--e-1);
+  font-size: var(--t-1);
   font-weight: 600;
   color: var(--texto-suave);
 }
@@ -918,7 +959,7 @@ html:not(.js) .seleccion {
   border: 1px solid transparent;
   border-radius: var(--radio);
   color: var(--texto);
-  font-size: 1rem;
+  font-size: var(--t-1);
   cursor: pointer;
 }
 
@@ -932,7 +973,7 @@ html:not(.js) .seleccion {
 }
 
 .dia.es-hoy {
-  border-color: var(--acento);
+  border-color: var(--principal);
   font-weight: 700;
 }
 
@@ -958,16 +999,16 @@ html:not(.js) .seleccion {
 .leyenda {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  padding: 0.75rem 0.5rem 0;
-  font-size: 1rem;
+  gap: var(--e-2) var(--e-5);
+  padding: var(--e-3) var(--e-2) 0;
+  font-size: var(--t-1);
   color: var(--texto-suave);
 }
 
 .leyenda li {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--e-2);
 }
 
 .muestra {
@@ -986,18 +1027,18 @@ html:not(.js) .seleccion {
 }
 
 .muestra-hoy {
-  border: 1px solid var(--acento);
+  border: 1px solid var(--principal);
 }
 
 .calendario-error {
-  margin: 0.75rem 0.5rem 0;
+  margin: var(--e-3) var(--e-2) 0;
 }
 
 /* La ayuda de teclado solo se muestra en equipos con ratón/teclado. */
 .calendario-ayuda {
   display: none;
-  padding: 0.5rem 0.5rem 0;
-  font-size: 1rem;
+  padding: var(--e-2) var(--e-2) 0;
+  font-size: var(--t-1);
   color: var(--texto-suave);
 }
 
@@ -1009,19 +1050,19 @@ html:not(.js) .seleccion {
 
 .seleccion {
   display: grid;
-  gap: 0.75rem;
-  padding: 1rem 1.25rem 1.25rem;
+  gap: var(--e-3);
+  padding: var(--e-4) var(--e-5) var(--e-5);
 }
 
 .seleccion-datos > div,
 .resumen-datos > div {
-  padding-block: 0.5rem;
+  padding-block: var(--e-2);
   border-bottom: 1px solid var(--borde-suave);
 }
 
 .seleccion-datos dt,
 .resumen-datos dt {
-  font-size: 1rem;
+  font-size: var(--t-1);
   color: var(--texto-suave);
 }
 
@@ -1042,12 +1083,12 @@ html:not(.js) .seleccion {
    (6 px por dentro) y los bloques se separan 22 px entre sí. */
 .campos {
   display: grid;
-  gap: 1.375rem;
+  gap: var(--e-6);
 }
 
 .campo {
   display: grid;
-  gap: 0.375rem;
+  gap: var(--e-2);
 }
 
 .campo label {
@@ -1055,22 +1096,30 @@ html:not(.js) .seleccion {
 }
 
 .campo-ayuda {
-  font-size: 1rem;
+  font-size: var(--t-1);
   color: var(--texto-suave);
 }
 
-.campo input {
+.campo input,
+.campo textarea {
   width: 100%;
   min-height: var(--tactil);
-  padding: 0.5rem 0.75rem;
+  padding: var(--e-2) var(--e-3);
   background: var(--superficie);
   border: 1px solid var(--borde);
   border-radius: var(--radio);
   color: var(--texto);
-  font-size: 1.0625rem;            /* ≥ 16 px: iOS no amplía la página al enfocar */
+  font-size: var(--t-2);            /* ≥ 16 px: iOS no amplía la página al enfocar */
 }
 
-.campo input:focus-visible {
+.campo textarea {
+  min-height: 9rem;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.campo input:focus-visible,
+.campo textarea:focus-visible {
   outline-offset: 1px;
 }
 
@@ -1082,15 +1131,16 @@ html:not(.js) .seleccion {
 }
 
 /* Error: borde más grueso + icono + texto (el color no es la única señal). */
-.campo input[aria-invalid="true"] {
+.campo input[aria-invalid="true"],
+.campo textarea[aria-invalid="true"] {
   border: 2px solid var(--error);
-  padding: calc(0.5rem - 1px) calc(0.75rem - 1px);
+  padding: calc(var(--e-2) - 1px) calc(var(--e-3) - 1px);
 }
 
 .campo-error {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: var(--e-2);
   color: var(--error);
   font-weight: 600;
 }
@@ -1106,7 +1156,7 @@ html:not(.js) .seleccion {
   border-radius: 50%;
   background: var(--error);
   color: var(--superficie);
-  font-size: 0.875rem;
+  font-size: var(--t-1);
   font-weight: 700;
   line-height: 1;
 }
@@ -1114,7 +1164,7 @@ html:not(.js) .seleccion {
 /* Casilla de ofertas, pegada a su aviso de uso de datos. */
 .consentimiento {
   display: grid;
-  gap: 0.375rem;
+  gap: var(--e-2);
 }
 
 .aviso-datos {
@@ -1124,7 +1174,7 @@ html:not(.js) .seleccion {
 .casilla {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--e-3);
   min-height: var(--tactil);
   cursor: pointer;
 }
@@ -1139,29 +1189,29 @@ html:not(.js) .seleccion {
 
 /* Resumen: fechas, precio y botón juntos. */
 .resumen {
-  padding: 1.25rem;
+  padding: var(--e-5);
 }
 
 .resumen h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: var(--t-4);
+  margin-bottom: var(--e-2);
 }
 
 .resumen-noches {
   font-family: var(--fuente-titulos);
-  font-size: 1.5rem;
+  font-size: var(--t-4);
   font-weight: 400;
   color: var(--principal);
 }
 
 .precios {
   width: 100%;
-  margin-top: 1.25rem;
+  margin-top: var(--e-5);
   border-collapse: collapse;
 }
 
 .precios caption {
-  padding-bottom: 0.25rem;
+  padding-bottom: var(--e-1);
   text-align: left;
   font-weight: 600;
   color: var(--principal);
@@ -1169,13 +1219,13 @@ html:not(.js) .seleccion {
 
 .precios th,
 .precios td {
-  padding: 0.5rem 0.25rem;
+  padding: var(--e-2) var(--e-1);
   text-align: left;
   border-bottom: 1px solid var(--borde-suave);
 }
 
 .precios thead th {
-  font-size: 1rem;
+  font-size: var(--t-1);
   font-weight: 600;
   color: var(--texto-suave);
 }
@@ -1198,14 +1248,14 @@ html:not(.js) .seleccion {
 }
 
 .precio-nota {
-  margin-top: 0.75rem;
+  margin-top: var(--e-3);
   color: var(--texto-suave);
 }
 
 .resumen-acciones {
   display: grid;
-  gap: 0.5rem;
-  margin-top: 1.5rem;
+  gap: var(--e-2);
+  margin-top: var(--e-6);
 }
 
 .ayuda-boton {
@@ -1217,10 +1267,213 @@ html:not(.js) .seleccion {
   font-weight: 600;
 }
 
+/* 15b. Llamadas a la acción: acción + beneficio real en una segunda línea (ley de Fitts:
+        al menos 48 px de alto y todo el ancho en el móvil, dentro de .acciones). */
+.boton-cta {
+  flex-direction: column;
+  gap: 0;
+  padding-block: var(--e-2);
+}
+
+.boton-subtexto {
+  font-size: var(--t-1);
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+/* Textos pendientes de los dueños: se ven como hueco, nunca como dato real. */
+.pendiente {
+  padding: 0 var(--e-1);
+  background: var(--marcador);
+  border: 1px dashed var(--borde);
+  border-radius: var(--radio);
+  color: var(--texto-suave);
+  font-style: italic;
+}
+
+.opcional {
+  font-weight: 400;
+  color: var(--texto-suave);
+}
+
+.cierre {
+  margin-top: var(--e-7);
+  font-family: var(--fuente-titulos);
+  font-size: var(--t-3);
+  color: var(--principal);
+}
+
+/* 15c. Contacto (portada). */
+.formulario-contacto {
+  display: grid;
+  gap: var(--e-6);
+  margin-top: var(--e-6);
+}
+
+.formulario-contacto .acciones {
+  margin-top: 0;
+}
+
+.contador {
+  font-size: var(--t-1);
+  color: var(--texto-suave);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.contador.cerca-del-limite {
+  color: var(--texto);
+  font-weight: 700;
+}
+
+/* Campo trampa para robots: fuera de la vista y del orden de tabulación. */
+.campo-trampa {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.exito {
+  display: grid;
+  gap: var(--e-4);
+  justify-items: start;
+  margin-top: var(--e-6);
+  padding: var(--e-5);
+  background: var(--superficie);
+  border: 1px solid var(--borde-suave);
+  border-left: 4px solid var(--principal);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.exito h3 {
+  margin: 0;
+  font-size: var(--t-4);
+}
+
+.aviso-sin-envio {
+  margin-top: 0;
+}
+
+/* 15d. Confirmación de la reserva: el final de la experiencia. */
+.confirmacion {
+  margin-top: var(--e-7);
+  padding: var(--e-5);
+  background: var(--superficie);
+  border: 1px solid var(--borde-suave);
+  border-top: 4px solid var(--principal);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+
+.confirmacion h2 {
+  margin-bottom: var(--e-2);
+}
+
+.confirmacion h3 {
+  margin-top: var(--e-7);
+  font-size: var(--t-4);
+}
+
+.confirmacion-datos > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 var(--e-4);
+}
+
+.confirmacion-datos dd {
+  font-weight: 600;
+  text-align: right;
+}
+
+.pasos {
+  counter-reset: paso;
+}
+
+.pasos li {
+  counter-increment: paso;
+  position: relative;
+  padding: var(--e-3) 0 var(--e-3) var(--e-8);
+  border-bottom: 1px solid var(--borde-suave);
+}
+
+.pasos li::before {
+  content: counter(paso);
+  position: absolute;
+  left: 0;
+  top: var(--e-3);
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--principal);
+  color: var(--sobre-principal);
+  font-weight: 700;
+}
+
+.contacto-lista li {
+  padding-block: var(--e-2);
+}
+
+.contacto-lista a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tactil);
+}
+
+/* 15e. Sobre nosotros. */
+.portada-sobre .entradilla {
+  margin-top: var(--e-4);
+}
+
+.datos-contacto dd a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tactil);
+}
+
+/* 15f. Barra fija «Reservar» (solo móvil): al alcance del pulgar. El pie reserva su
+        hueco, así que la barra nunca tapa el contenido; app.js la oculta cuando se ve
+        el pie, otra llamada equivalente o hay un campo enfocado. */
+.barra-reservar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 15;
+  padding: var(--e-2) var(--e-4) calc(var(--e-2) + env(safe-area-inset-bottom, 0px));
+  background: var(--fondo);
+  border-top: 1px solid var(--borde-suave);
+  box-shadow: var(--sombra-flotante);
+}
+
+.barra-reservar .boton {
+  width: 100%;
+}
+
+.barra-reservar.oculta {
+  visibility: hidden;
+  transform: translateY(100%);
+}
+
+.con-barra-reservar .pie {
+  padding-bottom: calc(var(--e-10) + var(--e-6) + env(safe-area-inset-bottom, 0px));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .barra-reservar {
+    transition: transform 0.2s ease, visibility 0.2s ease;
+  }
+}
+
 /* 16. Pie de página. Fondo oscuro, así que el foco usa un acento claro. */
 .pie {
   --foco: var(--pie-foco);
-  padding-block: 2.5rem;
+  padding-block: var(--e-7);
   background: var(--pie-fondo);
   color: var(--pie-texto);
 }
@@ -1232,12 +1485,12 @@ html:not(.js) .seleccion {
 
 .pie-interior {
   display: grid;
-  gap: 1rem;
+  gap: var(--e-4);
 }
 
 .pie-marca {
   font-family: var(--fuente-titulos);
-  font-size: 1.25rem;
+  font-size: var(--t-3);
   color: var(--pie-titulo);
 }
 
@@ -1250,8 +1503,10 @@ html:not(.js) .seleccion {
   text-underline-offset: 0.2em;
 }
 
-.pie-enlace {
-  justify-self: start;
+.pie-enlaces {
+  display: grid;
+  gap: 0 var(--e-5);
+  justify-items: start;
 }
 
 .pie a:active {
@@ -1292,13 +1547,13 @@ html:not(.js) .seleccion {
 
 .dialogo-cabecera {
   flex: none;
-  padding: 1rem 1.25rem 0.75rem;
+  padding: var(--e-4) var(--e-5) var(--e-3);
   border-bottom: 1px solid var(--borde-suave);
 }
 
 .dialogo-cabecera h2 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: var(--t-4);
 }
 
 .dialogo-cuerpo {
@@ -1306,7 +1561,7 @@ html:not(.js) .seleccion {
   min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 1rem 1.25rem;
+  padding: var(--e-4) var(--e-5);
 }
 
 .dialogo-cuerpo:focus-visible {
@@ -1314,8 +1569,8 @@ html:not(.js) .seleccion {
 }
 
 .dialogo-fechas {
-  margin-bottom: 1rem;
-  padding: 0.75rem 1rem;
+  margin-bottom: var(--e-4);
+  padding: var(--e-3) var(--e-4);
   background: var(--fondo);
   border-radius: var(--radio);
 }
@@ -1323,7 +1578,7 @@ html:not(.js) .seleccion {
 .dialogo-fechas > div {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 0.5rem;
+  gap: 0 var(--e-2);
 }
 
 .dialogo-fechas dt {
@@ -1335,19 +1590,19 @@ html:not(.js) .seleccion {
 }
 
 .dialogo-cuerpo .reglas {
-  margin-top: 0.5rem;
+  margin-top: var(--e-2);
 }
 
 .dialogo-pie {
   flex: none;
-  padding: 0.75rem 1.25rem 1rem;
+  padding: var(--e-3) var(--e-5) var(--e-4);
   border-top: 1px solid var(--borde-suave);
 }
 
 .dialogo-mensaje {
-  margin-bottom: 0.75rem;
-  padding: 0.75rem 1rem;
-  border-left: 3px solid var(--acento);
+  margin-bottom: var(--e-3);
+  padding: var(--e-3) var(--e-4);
+  border-left: 3px solid var(--principal);
   background: var(--fondo);
 }
 
@@ -1357,7 +1612,7 @@ html:not(.js) .seleccion {
 
 .dialogo-botones {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--e-2);
 }
 
 /* 18. Volver arriba: fijo abajo a la derecha, respetando la zona segura del móvil.
@@ -1393,11 +1648,11 @@ html:not(.js) .seleccion {
 
 /* 19. Páginas de error. */
 .pagina-error {
-  padding-block: 3.5rem 4.5rem;
+  padding-block: var(--e-8) var(--e-9);
 }
 
 .pagina-error h1 {
-  margin-bottom: 1rem;
+  margin-bottom: var(--e-4);
 }
 
 /* 20. Modo de alto contraste de Windows: la selección sigue siendo visible. */
@@ -1433,8 +1688,8 @@ html:not(.js) .seleccion {
   }
 
   .boton-principal:not(:disabled):hover {
-    background: var(--principal-hover);
-    border-color: var(--principal-hover);
+    background: var(--acento-hover);
+    border-color: var(--acento-hover);
   }
 
   .boton-secundario:not(:disabled):not([aria-pressed="true"]):hover,
@@ -1492,7 +1747,7 @@ html:not(.js) .seleccion {
   .cabecera-interior {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--e-4);
     height: 3.5rem;
   }
 
@@ -1511,12 +1766,26 @@ html:not(.js) .seleccion {
 
   .navegacion ul {
     display: flex;
-    gap: 0.25rem;
+    gap: var(--e-1);
     height: auto;
   }
 
   .navegacion a {
-    padding-inline: 0.875rem;
+    padding-inline: var(--e-3);
+    font-size: var(--t-2);
+  }
+
+  /* La barra fija solo existe en el móvil. */
+  .barra-reservar {
+    display: none;
+  }
+
+  .con-barra-reservar .pie {
+    padding-bottom: var(--e-7);
+  }
+
+  .pie-enlaces {
+    grid-auto-flow: column;
   }
 
   .acciones {
@@ -1531,7 +1800,7 @@ html:not(.js) .seleccion {
   }
 
   .calendario {
-    padding: 1rem;
+    padding: var(--e-4);
   }
 
   .resumen-acciones,
@@ -1559,21 +1828,21 @@ html:not(.js) .seleccion {
 /* 23. Pantallas grandes (desde 56rem = 896 px). */
 @media (min-width: 56rem) {
   .contenedor {
-    padding-inline: 2rem;
+    padding-inline: var(--e-7);
   }
 
   .seccion {
-    padding-block: 5rem;
+    padding-block: var(--e-10);
   }
 
   .portada {
-    padding-block: 4rem 5rem;
+    padding-block: var(--e-9) var(--e-10);
   }
 
   .portada-interior {
     grid-template-columns: 1.1fr 1fr;
     align-items: center;
-    gap: 3rem;
+    gap: var(--e-8);
   }
 
   /* Portada: 4:3 en el móvil y 16:9 en el escritorio. */
@@ -1582,18 +1851,22 @@ html:not(.js) .seleccion {
   }
 
   .datos,
-  .grupos-beneficios,
+  .incluido,
   .galeria {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .datos-contacto {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .fechas {
     grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
     align-items: start;
-    gap: 1.25rem;
+    gap: var(--e-5);
   }
 
   .resumen {
-    padding: 1.5rem 2rem;
+    padding: var(--e-6) var(--e-7);
   }
 }

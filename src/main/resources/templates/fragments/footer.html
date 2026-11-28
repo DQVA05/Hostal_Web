@@ -8,11 +8,29 @@
         <p class="pie-marca">Casita de Tercera</p>
         <p>Costamar, La Habana</p>
         <p>Dirección:</p>
-        <p>Avenida 3era # 16224 / 162 y 162D Zona 1 Alamar Habana del Este.</p>
+        <p th:insert="~{fragments/footer :: direccion}">Dirección</p>
         <p>Contacto: <a class="pie-telefono" href="tel:+5354698462">+53 54698462</a></p>
       </address>
-      <a class="pie-enlace" th:href="@{/}">Volver al inicio</a>
+      <ul class="pie-enlaces">
+        <li><a class="pie-enlace" th:href="@{/sobre-nosotros}">Sobre nosotros</a></li>
+        <li><a class="pie-enlace" th:href="@{/reserva}">Reservar</a></li>
+        <li><a class="pie-enlace" th:href="@{/}">Volver al inicio</a></li>
+      </ul>
     </div>
   </footer>
+
+  <!-- Dirección: un solo sitio para el pie y «Sobre nosotros».
+       TODO: confirmar que es la dirección exacta (y el enlace de mapas de «Sobre nosotros»). -->
+  <th:block th:fragment="direccion">Avenida 3era # 16224 / 162 y 162D Zona 1 Alamar Habana del Este.</th:block>
+
+  <!-- Barra fija «Reservar» (solo en el móvil). Se incluye en la portada y en «Sobre nosotros»,
+       nunca en la página de reserva. app.js la oculta cuando se ve el pie, otra llamada a la
+       acción equivalente o cuando hay un campo enfocado (teclado abierto). -->
+  <div class="barra-reservar" th:fragment="barra-reservar" data-barra-reservar>
+    <a class="boton boton-principal boton-cta" th:href="@{/reserva}">
+      <span>Reservar</span>
+      <span class="boton-subtexto">Parqueo y WiFi incluidos</span>
+    </a>
+  </div>
 </body>
 </html>
